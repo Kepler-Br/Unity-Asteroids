@@ -72,8 +72,12 @@ public class AsteroidScript : MonoBehaviour
         rigidbody2D.velocity = velocity;
     }
 
-    void Initialize()
+    public void Initialize(float maxRadius, float minRadius, uint canBeDestroyedTimes)
     {
+        this.maxRadius = maxRadius;
+        this.minRadius = minRadius;
+        this.canBeDestroyedTimes = canBeDestroyedTimes;
+
         Vector3[] circleVertices = GenerateAsteroidVerticles();
         SetupLineRenderer(circleVertices);
         SetupPolygonCollider2D(circleVertices);
@@ -82,7 +86,14 @@ public class AsteroidScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Initialize();
+        Initialize(1.5f, 0.5f, 1);
+    }
+
+    void CreateSmallerAsteroid()
+    {
+        GameObject smallerAsteroid = Instatiate(this, position, Quaternion.identity);
+        AsteroidScript asteroidScript = smallerAsteroid.GetComponent<AsteroidScript>();
+        asteroidScript.Initialize(maxRadius/2.0f, minRadius/2.0f, canBeDestroyedTimes-1);
     }
 
     // Update is called once per frame
@@ -90,7 +101,14 @@ public class AsteroidScript : MonoBehaviour
     {
         if(isDestroyed)
         {
-            
+            this.Destroy();
+            if(canBeDestroyedTimes > 0)
+            {
+                const uint maxSmallerAsteroids = 4;
+                int asteroidNum = Random.Range(1, maxSmallerAsteroids);
+                for(int i = 0; i < asteroidNum; i++)
+                    CreateSmallerAsteroid();
+            }
         }
     }
 }

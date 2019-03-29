@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AsteroidSpawner : MonoBehaviour
 {
+    public int spawnTotalAsteroids = 10;
     public GameObject asteroidPrefab;
     // Start is called before the first frame update
 
@@ -24,11 +25,14 @@ public class AsteroidSpawner : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < 10; i++)
-            CreateAsteroidBig();
-
-        for (int i = 0; i < 10; i++)
-            CreateAsteroidSmall();
+        for (int i = 0; i < spawnTotalAsteroids; i++)
+        {
+            int choice = Random.Range(0, 2);
+            if (choice == 0)
+                CreateAsteroidBig();
+            else
+                CreateAsteroidSmall();
+        }
     }
 
     // Update is called once per frame

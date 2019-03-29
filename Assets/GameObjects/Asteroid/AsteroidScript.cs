@@ -9,7 +9,7 @@ public class AsteroidScript : MonoBehaviour
 {
     public float maxRadius = 1.0f;
     public float minRadius = 0.5f;
-    public uint canBeDestroyedTimes = 1;
+    public int canBeDestroyedTimes = 1;
     // For testing purposes.
     public bool isDestroyed = false;
 
@@ -54,8 +54,8 @@ public class AsteroidScript : MonoBehaviour
 
     Vector2 GenerateRandomVelocity()
     {
-        const float MAX_VELOCITY = 2.0f;
-        const float MIN_VELOCITY = 0.5f;
+        const float MAX_VELOCITY = 1.0f;
+        const float MIN_VELOCITY = 0.1f;
 
         float degree = Random.Range(0.0f, Mathf.PI*2.0f);
         float radius = Random.Range(MIN_VELOCITY, MAX_VELOCITY);
@@ -72,11 +72,12 @@ public class AsteroidScript : MonoBehaviour
         rigidbody2D.velocity = velocity;
     }
 
-    public void Initialize(float maxRadius, float minRadius, uint canBeDestroyedTimes)
+    public void Initialize(float maxRadius, float minRadius, int canBeDestroyedTimes)
     {
         this.maxRadius = maxRadius;
         this.minRadius = minRadius;
         this.canBeDestroyedTimes = canBeDestroyedTimes;
+        isDestroyed = false;
 
         Vector3[] circleVertices = GenerateAsteroidVerticles();
         SetupLineRenderer(circleVertices);
@@ -86,12 +87,11 @@ public class AsteroidScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Initialize(1.5f, 0.5f, 1);
     }
 
     void CreateSmallerAsteroid()
     {
-        GameObject smallerAsteroid = Instatiate(this, position, Quaternion.identity);
+        GameObject smallerAsteroid = Instantiate(this.gameObject, transform.position, Quaternion.identity);
         AsteroidScript asteroidScript = smallerAsteroid.GetComponent<AsteroidScript>();
         asteroidScript.Initialize(maxRadius/2.0f, minRadius/2.0f, canBeDestroyedTimes-1);
     }
@@ -101,14 +101,15 @@ public class AsteroidScript : MonoBehaviour
     {
         if(isDestroyed)
         {
-            this.Destroy();
             if(canBeDestroyedTimes > 0)
             {
-                const uint maxSmallerAsteroids = 4;
-                int asteroidNum = Random.Range(1, maxSmallerAsteroids);
+                const int maxSmallerAsteroids = 4;
+                int asteroidNum = Random.Range(2, maxSmallerAsteroids);
                 for(int i = 0; i < asteroidNum; i++)
                     CreateSmallerAsteroid();
             }
+            Destroy(gameObject);
+            
         }
     }
 }

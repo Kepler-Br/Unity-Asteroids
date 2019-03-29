@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2929092247371747024}
   - component: {fileID: 2929092247371747025}
   - component: {fileID: 2929092247371747118}
+  - component: {fileID: 990681525112752971}
+  - component: {fileID: 597640035721534732}
   m_Layer: 0
   m_Name: Asteroid
   m_TagString: Untagged
@@ -48,6 +50,7 @@ MonoBehaviour:
   maxRadius: 1
   minRadius: 0.5
   canBeDestroyedTimes: 1
+  isDestroyed: 0
 --- !u!120 &2929092247371747025
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -173,3 +176,36 @@ PolygonCollider2D:
       - {x: -0.2938926, y: -0.40450853}
       - {x: 0.29389268, y: -0.40450847}
       - {x: 0.47552824, y: 0.15450856}
+--- !u!50 &990681525112752971
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2929092247371747026}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &597640035721534732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2929092247371747026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594be32a52cf1488b906be9accad7d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

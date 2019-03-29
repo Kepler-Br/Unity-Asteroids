@@ -21,6 +21,7 @@ public class WrapperMain : MonoBehaviour
         screenHeight = screenTopRight.y - screenBottomLeft.y;
     }
 
+    // TODO: remove simulteniously from childrens. (one function)
     void CreateGhosts()
     {
         for (int i = 0; i < 8; i++)

@@ -390,11 +390,9 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.31510654, y: 0.4946592}
-      - {x: -0.7906348, y: 0.14916767}
-      - {x: -0.60899913, y: -0.40984935}
-      - {x: -0.02121386, y: -0.4098493}
-      - {x: 0.1604217, y: 0.14916775}
+    - - {x: -0.4, y: -1}
+      - {x: 0, y: 1}
+      - {x: 0.4, y: -1}
 --- !u!50 &2144402903
 Rigidbody2D:
   serializedVersion: 4
@@ -454,8 +452,9 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: -0.4, y: -1, z: 0}
+  - {x: 0, y: 1, z: 1}
+  - {x: 0.4, y: -1, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -464,7 +463,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.06944275
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -510,7 +509,7 @@ LineRenderer:
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 0
-  m_Loop: 0
+  m_Loop: 1
 --- !u!4 &2144402905
 Transform:
   m_ObjectHideFlags: 0
@@ -520,7 +519,7 @@ Transform:
   m_GameObject: {fileID: 2144402901}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.31510654, y: 0.0053408095, z: -0.01842158}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 1.16, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -537,6 +536,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11d58d8716fa9689cb5eb9feb6576275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mat: {fileID: 2100000, guid: cf41a076f040eec3495adaa9bac0caa3, type: 2}
+  thrustSpeed: 5
+  rotationSpeed: 3
 --- !u!114 &2144402907
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,8 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerScript : MonoBehaviour
 {
-    public Material mat;
-    public float thrustSpeed = 5.0f;
+    public float thrustSpeed = 50.0f;
     public float rotationSpeed = 3.0f;
     Vector3[] GeneratePlayerVerticles(float size)
     {
@@ -52,16 +51,16 @@ public class PlayerScript : MonoBehaviour
 
     void OnPostRender()
     {
-        // GL.PushMatrix();
-        mat.SetPass(0);
-        // GL.LoadOrtho();
+        // // GL.PushMatrix();
+        // mat.SetPass(0);
+        // // GL.LoadOrtho();
 
-        GL.Begin(GL.LINES);
-        GL.Color(Color.red);
-        GL.Vertex(new Vector3(-10.4f, -1.0f, 0.0f));
-        GL.Vertex(new Vector3(0.0f, 1.0f, 0.0f));
-        GL.Vertex(new Vector3(10.4f, -1.0f, 0.0f));
-        GL.End();
+        // GL.Begin(GL.LINES);
+        // GL.Color(Color.red);
+        // GL.Vertex(new Vector3(-10.4f, -1.0f, 0.0f));
+        // GL.Vertex(new Vector3(0.0f, 1.0f, 0.0f));
+        // GL.Vertex(new Vector3(10.4f, -1.0f, 0.0f));
+        // GL.End();
 
         // GL.PopMatrix();
     }
@@ -76,7 +75,6 @@ public class PlayerScript : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            
             rb.AddForce(this.transform.up*this.thrustSpeed);
         }
         if (Input.GetKey(KeyCode.S))

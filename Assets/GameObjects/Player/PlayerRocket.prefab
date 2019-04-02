@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8410094216231018577}
   m_Layer: 0
   m_Name: PlayerRocket
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -192,8 +192,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11d58d8716fa9689cb5eb9feb6576275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireTimer: 0.07
   thrustSpeed: 20
   rotationSpeed: 3
+  bulletPrefab: {fileID: 4089688870801636021, guid: 1894fed398a3e62cbbae0bec77743d53,
+    type: 3}
 --- !u!114 &8410094216231018577
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class WrapperMain : MonoBehaviour
 {
-    Transform[] ghosts = new Transform[8];
+    GameObject[] ghosts = new GameObject[8];
 
     float screenWidth;
     float screenHeight;
 
 
+    void OnDestroy()
+    {
+        foreach (var i in ghosts)
+        {
+            DestroyImmediate(i);
+        }
+    }
     void ReceiveScreenGeometry()
     {
         var cam = Camera.main;
@@ -26,11 +33,17 @@ public class WrapperMain : MonoBehaviour
     {
         for (int i = 0; i < 8; i++)
         {
-            ghosts[i] = Instantiate(transform, Vector3.zero, Quaternion.identity) as Transform;
+            ghosts[i] = Instantiate(gameObject, Vector3.zero, Quaternion.identity);
+
             DestroyImmediate(ghosts[i].GetComponent<WrapperMain>());
+            var coms = ghosts[i].GetComponents<MonoBehaviour>();
+            foreach (var com in coms)
+                Destroy(com);
         }
-        for (int i = 0; i < 8; i++)
-            ghosts[i].transform.parent = gameObject.transform;
+
+        // for (int i = 0; i < 8; i++)
+            // ghosts[i].transform.parent = gameObject.transform;
+
     }
 
     void PositionGhosts()
@@ -43,47 +56,47 @@ public class WrapperMain : MonoBehaviour
         // Let's start with the far right.
         ghostPosition.x = transform.position.x + screenWidth;
         ghostPosition.y = transform.position.y;
-        ghosts[0].position = ghostPosition;
+        ghosts[0].transform.position = ghostPosition;
 
         // Bottom-right
         ghostPosition.x = transform.position.x + screenWidth;
         ghostPosition.y = transform.position.y - screenHeight;
-        ghosts[1].position = ghostPosition;
+        ghosts[1].transform.position = ghostPosition;
 
         // Bottom
         ghostPosition.x = transform.position.x;
         ghostPosition.y = transform.position.y - screenHeight;
-        ghosts[2].position = ghostPosition;
+        ghosts[2].transform.position = ghostPosition;
 
         // Bottom-left
         ghostPosition.x = transform.position.x - screenWidth;
         ghostPosition.y = transform.position.y - screenHeight;
-        ghosts[3].position = ghostPosition;
+        ghosts[3].transform.position = ghostPosition;
 
         // Left
         ghostPosition.x = transform.position.x - screenWidth;
         ghostPosition.y = transform.position.y;
-        ghosts[4].position = ghostPosition;
+        ghosts[4].transform.position = ghostPosition;
 
         // Top-left
         ghostPosition.x = transform.position.x - screenWidth;
         ghostPosition.y = transform.position.y + screenHeight;
-        ghosts[5].position = ghostPosition;
+        ghosts[5].transform.position = ghostPosition;
 
         // Top
         ghostPosition.x = transform.position.x;
         ghostPosition.y = transform.position.y + screenHeight;
-        ghosts[6].position = ghostPosition;
+        ghosts[6].transform.position = ghostPosition;
 
         // Top-right
         ghostPosition.x = transform.position.x + screenWidth;
         ghostPosition.y = transform.position.y + screenHeight;
-        ghosts[7].position = ghostPosition;
+        ghosts[7].transform.position = ghostPosition;
 
         // All ghost ships should have the same rotation as the main ship
         for (int i = 0; i < 8; i++)
         {
-            ghosts[i].rotation = transform.rotation;
+            ghosts[i].transform.rotation = transform.rotation;
         }
     }
 
@@ -91,27 +104,27 @@ public class WrapperMain : MonoBehaviour
     {
         var newPosition = transform.position;
 
-        if (transform.position.x > screenWidth/2.0f)
+        if (transform.position.x > screenWidth / 2.0f)
         {
-            newPosition.x = -screenWidth/2.0f;
+            newPosition.x = -screenWidth / 2.0f;
             transform.position = newPosition;
         }
 
-        if (transform.position.x < -screenWidth/2.0f)
+        if (transform.position.x < -screenWidth / 2.0f)
         {
-            newPosition.x = screenWidth/2.0f;
+            newPosition.x = screenWidth / 2.0f;
             transform.position = newPosition;
         }
 
-        if (transform.position.y < -screenHeight/2.0f)
+        if (transform.position.y < -screenHeight / 2.0f)
         {
-            newPosition.y = screenHeight/2.0f;
+            newPosition.y = screenHeight / 2.0f;
             transform.position = newPosition;
         }
 
-        if (transform.position.y > screenHeight/2.0f)
+        if (transform.position.y > screenHeight / 2.0f)
         {
-            newPosition.y = -screenHeight/2.0f;
+            newPosition.y = -screenHeight / 2.0f;
             transform.position = newPosition;
         }
     }
@@ -120,6 +133,7 @@ public class WrapperMain : MonoBehaviour
     void Start()
     {
         ReceiveScreenGeometry();
+
         CreateGhosts();
     }
 

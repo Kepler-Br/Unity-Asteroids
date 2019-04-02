@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class AsteroidScript : MonoBehaviour
 {
+    public GameObject asteroidPrefab;
     public float maxRadius = 1.0f;
     public float minRadius = 0.5f;
     public int canBeDestroyedTimes = 1;
@@ -91,7 +92,7 @@ public class AsteroidScript : MonoBehaviour
 
     void CreateSmallerAsteroid()
     {
-        GameObject smallerAsteroid = Instantiate(this.gameObject, transform.position, Quaternion.identity);
+        GameObject smallerAsteroid = Instantiate(asteroidPrefab, transform.position, Quaternion.identity);
         AsteroidScript asteroidScript = smallerAsteroid.GetComponent<AsteroidScript>();
         asteroidScript.Initialize(maxRadius/2.0f, minRadius/2.0f, canBeDestroyedTimes-1);
     }
@@ -109,7 +110,15 @@ public class AsteroidScript : MonoBehaviour
                     CreateSmallerAsteroid();
             }
             Destroy(gameObject);
-            
+        }
+    }
+
+    void OnCollisionEnter2D (Collision2D col)
+    {
+        Debug.Log(col.gameObject.tag);
+        if(col.gameObject.tag == "Bullet")
+        {
+            isDestroyed = true;
         }
     }
 }

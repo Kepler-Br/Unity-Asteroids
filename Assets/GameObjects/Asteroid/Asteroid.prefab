@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 597640035721534732}
   m_Layer: 0
   m_Name: Asteroid
-  m_TagString: Untagged
+  m_TagString: Asteroid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b06a879b859080ecb6c6a15c2033ebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  asteroidPrefab: {fileID: 2929092247371747026}
   maxRadius: 1
   minRadius: 0.5
   canBeDestroyedTimes: 1

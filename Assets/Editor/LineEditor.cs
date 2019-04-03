@@ -6,8 +6,6 @@ using UnityEditor;
 [CustomEditor(typeof(LineCreator))]
 public class LineEditor : Editor
 {
-    [Range(0.0f, 10.0f)]
-    public float lineWidth = 1.0f;
     LineCreator creator;
     List<Vector3> lines;
 
@@ -29,6 +27,10 @@ public class LineEditor : Editor
             OnInputAddPoint(mousePos);
         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 1)
             OnInputDeletePoint(mousePos);
+        if (creator.autoupdate && guiEvent.type == EventType.Repaint)
+            creator.UpdateMesh();
+
+        HandleUtility.AddDefaultControl(0);
 
     }
 
@@ -66,18 +68,25 @@ public class LineEditor : Editor
         {
             Vector3 pointOne = lines[i];
             Vector3 pointTwo = lines[i + 1];
-            
+
             Vector3 normal = pointTwo - pointOne;
             normal.Normalize();
             normal = new Vector3(-normal.y, normal.x, 0.0f);
             Handles.color = Color.black;
             Handles.DrawLine(pointOne, pointTwo);
             Handles.color = Color.yellow;
-            Handles.DrawLine(pointOne, pointOne+normal);
+
+            float lineWidth = creator.lineWidth;
+            normal *= lineWidth / 2.0f;
+            Handles.DrawLine(pointOne + normal, pointOne - normal);
+            Handles.DrawLine(pointOne + normal, pointTwo + normal);
+            Handles.DrawLine(pointOne - normal, pointTwo - normal);
+            Handles.DrawLine(pointTwo + normal, pointTwo - normal);
         }
         Handles.color = Color.red;
         for (int i = 0; i < lines.Count; i++)
         {
+
             Vector3 newPos = Handles.FreeMoveHandle(lines[i], Quaternion.identity, controlPointDiameter, Vector3.zero, Handles.CylinderHandleCap);
             if (lines[i] != newPos)
             {
@@ -95,37 +104,5 @@ public class LineEditor : Editor
             creator.CreateLines();
         }
         lines = creator.lines;
-    }
-
-
-    Vector3 VectorFromPoints(Vector3 pointOne, Vector3 pointTwo)
-    {
-        return pointTwo - pointOne;
-    }
-
-    Vector3 GetPerpendicularVector(Vector3 vector)
-    {
-        Vector3 rotatedVector = Vector3.zero;
-        const float angle = Mathf.PI / 2;
-        rotatedVector.x = vector.x * Mathf.Cos(angle) - vector.y * Mathf.Sin(angle);
-        rotatedVector.y = vector.x * Mathf.Sin(angle) - vector.y * Mathf.Cos(angle);
-        return rotatedVector;
-    }
-    void OnDrawGizmos()
-    {
-        Vector3 pointOne = new Vector3(0.0f, 0.0f, 0.0f);
-        Vector3 pointTwo = new Vector3(3.0f, 10.0f, 0.0f);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(pointOne, 0.1f);
-        Gizmos.DrawSphere(pointTwo, 0.1f);
-        Gizmos.color = Color.yellow;
-
-        Gizmos.DrawLine(pointOne, pointTwo);
-
-        Vector3 vec = GetPerpendicularVector(VectorFromPoints(pointOne, pointTwo));
-        vec.Normalize();
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(pointOne, vec * lineWidth);
     }
 }

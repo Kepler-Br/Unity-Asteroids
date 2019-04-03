@@ -141,8 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcce6a1358657dd268ea2026151d1c1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstSpawnCount: 10
-  spawnNewTimer: 3
+  firstSpawnCount: 0
+  spawnNewTimer: 0
   asteroidPrefab: {fileID: 2929092247371747026, guid: 3a056c32f940f0481855b4c09034793c,
     type: 3}
 --- !u!4 &331868420
@@ -257,6 +257,56 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1669847093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1669847094}
+  - component: {fileID: 1669847095}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1669847094
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669847093}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.79, y: 1.53, z: -1.21}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1669847095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669847093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4186fa21551b31ab3945fc842b9104b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lines:
+  - {x: -2.4297853, y: 1.0763264, z: 0}
+  - {x: -1.0246406, y: 1.0912948, z: 0}
+  - {x: -1.401229, y: -0.49650288, z: 0}
+  - {x: -2.437757, y: 0.4049059, z: 0}
+  - {x: -2.4344153, y: 1.0736527, z: 0}
+  Loop: 0
 --- !u!1001 &8410094217905610122
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -268,6 +318,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerRocket
+      objectReference: {fileID: 0}
+    - target: {fileID: 8410094216231018591, guid: f82dfa27f6a8d7680a85fbe452a76e5a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8410094216231018579, guid: f82dfa27f6a8d7680a85fbe452a76e5a,
         type: 3}

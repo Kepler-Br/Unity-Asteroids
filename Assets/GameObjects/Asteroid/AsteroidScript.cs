@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
+[RequireComponent(typeof(LineCreator))]
 [RequireComponent(typeof(PolygonCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class AsteroidScript : MonoBehaviour
 {
     public GameObject asteroidPrefab;
-    public float maxRadius = 1.0f;
-    public float minRadius = 0.5f;
+    public float maxRadius = 5.0f;
+    public float minRadius = 4.0f;
     public int canBeDestroyedTimes = 1;
     // For testing purposes.
     public bool isDestroyed = false;
@@ -39,12 +39,9 @@ public class AsteroidScript : MonoBehaviour
 
     void SetupLineRenderer(Vector3[] circleVertices)
     {
-        LineRenderer lineRenderer = this.GetComponent<LineRenderer>();
-        lineRenderer.startWidth = 0.05f;
-        lineRenderer.endWidth = 0.05f;
-        lineRenderer.loop = true;
-        lineRenderer.positionCount = circleVertices.Length;
-        lineRenderer.SetPositions(circleVertices);
+        LineCreator lineCreator = this.GetComponent<LineCreator>();
+        lineCreator.SetPoints(circleVertices);
+        lineCreator.AddPoint(circleVertices[0]);
     }
 
     void SetupPolygonCollider2D(Vector3[] circleVertices)
@@ -55,7 +52,7 @@ public class AsteroidScript : MonoBehaviour
 
     Vector2 GenerateRandomVelocity()
     {
-        const float MAX_VELOCITY = 1.0f;
+        const float MAX_VELOCITY = 5.0f;
         const float MIN_VELOCITY = 0.1f;
 
         float degree = Random.Range(0.0f, Mathf.PI*2.0f);

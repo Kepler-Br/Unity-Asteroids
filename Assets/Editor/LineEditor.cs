@@ -83,6 +83,32 @@ public class LineEditor : Editor
             Handles.DrawLine(pointOne - normal, pointTwo - normal);
             Handles.DrawLine(pointTwo + normal, pointTwo - normal);
         }
+        for (int i = 0; i < lines.Count - 2; i++)
+        {
+            Vector3 pointOne = lines[i];
+            Vector3 pointTwo = lines[i + 1];
+            Vector3 pointThree = lines[i + 2];
+
+            Vector3 normalOne = pointTwo - pointOne;
+            Vector3 normalTwo = pointThree - pointTwo;
+            // normalOne.Normalize();
+            // normalTwo.Normalize();
+            normalOne = new Vector3(-normalOne.y, normalOne.x, 0.0f);
+            normalTwo = new Vector3(-normalTwo.y, normalTwo.x, 0.0f);
+            normalOne.Normalize();
+            normalTwo.Normalize();
+            Vector3 result = normalOne + normalTwo;
+            result.Normalize();
+
+            Handles.color = Color.red;
+            Handles.DrawLine(pointTwo+result, pointTwo);
+
+            Handles.color = Color.blue;
+            Handles.DrawLine(pointTwo+normalOne, pointTwo);
+
+            Handles.color = Color.magenta;
+            Handles.DrawLine(pointTwo+normalTwo, pointTwo);
+        }
         Handles.color = Color.red;
         for (int i = 0; i < lines.Count; i++)
         {

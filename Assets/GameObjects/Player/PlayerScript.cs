@@ -10,6 +10,22 @@ public class PlayerScript : MonoBehaviour
     public float bulletSpeed = 1000.0f;
     public float bulletLifeTime = 10.0f;
     public GameObject bulletPrefab;
+    private GameManager gameManager;
+
+    void Start()
+    {
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        
+        if (col.gameObject.tag == "Asteroid")
+        {
+            
+            gameManager.SendMessage("DeleteAsteroids");
+        }
+    }
 
     void Update()
     {

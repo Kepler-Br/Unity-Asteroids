@@ -5,13 +5,20 @@ using UnityEngine;
 // public 
 public class GameManager : MonoBehaviour
 {
-    public enum GameState {StartState = 0, PlayingState, GameOverState};
+    public enum GameState { StartState = 0, PlayingState, GameOverState };
     public GameState gameState;
     public int firstSpawnCount = 10;
     public float spawnNewAsteroidEvery = 3.0f;
     private float spawnNewAsteroidTimer;
     public GameObject asteroidPrefab;
     // Start is called before the first frame update
+
+    void DeleteAsteroids()
+    {
+        GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
+        for (int i = 0; i < asteroids.Length; i++)
+            Destroy(asteroids[i]);
+    }
 
     void CreateAsteroidBig()
     {

@@ -8,14 +8,60 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class LineCreator : MonoBehaviour
 {
-    // [HideInInspector]
+    // Private vars.
+    private bool loop = false;
+    private bool smoothMesh = false;
+    const int minimumPoints = 2;
+
+    // Public properties
+    public int Count
+    {
+        get { return this.lines.Count; }
+        private set { }
+    }
+
+    // Public vars.
     [SerializeField]
     public List<Vector3> lines;
-    public bool loop = false;
-    public bool smoothMesh = true;
     public bool autoupdate = false;
-    [Range(0.0f, 10.0f)]
+    [Range(0.0f,5.0f)]
     public float lineWidth = 1.0f;
+
+
+    // Public methods.
+    public void SetPoints(Vector3[] points)
+    {
+        if (points.Length < 2)
+            return;
+        this.lines.Clear();
+        this.lines.AddRange(points);
+    }
+
+    public void AddPoint(Vector3 point)
+    {
+        this.lines.Add(point);
+    }
+
+    public void RemoveLastPoint()
+    {
+        if (lines.Count == minimumPoints)
+            return;
+        this.lines.RemoveAt(lines.Count - 1);
+    }
+
+    public void RemoveFirstPoint()
+    {
+        if (lines.Count == minimumPoints)
+            return;
+        this.lines.RemoveAt(0);
+    }
+
+    public void RemovePointAt(int index)
+    {
+        if (lines.Count == minimumPoints)
+            return;
+        this.lines.RemoveAt(index);
+    }
 
     public void CreateLines()
     {
@@ -28,6 +74,16 @@ public class LineCreator : MonoBehaviour
     {
         var meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = CreateMesh();
+    }
+
+
+    // Private methods.
+    Mesh CreateMesh()
+    {
+        if (smoothMesh)
+            return CreateSmoothMesh();
+        else
+            return CreateNotShoothMesh();
     }
 
     Mesh CreateSmoothMesh()
@@ -62,8 +118,6 @@ public class LineCreator : MonoBehaviour
 
             Vector3 normalOne = pointTwo - pointOne;
             Vector3 normalTwo = pointThree - pointTwo;
-            // Debug.Log(Vector3.Angle(normalOne, normalTwo));
-            // Vector3.c
             normalOne = new Vector3(-normalOne.y, normalOne.x, 0.0f);
             normalTwo = new Vector3(-normalTwo.y, normalTwo.x, 0.0f);
             Vector3 result = normalOne + normalTwo;
@@ -81,14 +135,14 @@ public class LineCreator : MonoBehaviour
         int triangleIndex = 0;
         for (int i = 0; i < lines.Count - 1; i++)
         {
-            triangles[triangleIndex] = vertexIndex +1;
+            triangles[triangleIndex] = vertexIndex + 1;
             triangles[triangleIndex + 1] = vertexIndex + 2;
             triangles[triangleIndex + 2] = vertexIndex;
 
             triangles[triangleIndex + 3] = vertexIndex + 3;
             triangles[triangleIndex + 4] = vertexIndex + 2;
             triangles[triangleIndex + 5] = vertexIndex + 1;
-            
+
             triangleIndex += 6;
             vertexIndex += 1;
         }
@@ -141,23 +195,10 @@ public class LineCreator : MonoBehaviour
         return mesh;
     }
 
-    Mesh CreateMesh()
-    {
-        if (smoothMesh)
-            return CreateSmoothMesh();
-        else
-            return CreateNotShoothMesh();
-    }
     // Start is called before the first frame update
     void Start()
     {
         var meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = CreateMesh();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

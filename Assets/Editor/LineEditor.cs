@@ -100,14 +100,14 @@ public class LineEditor : Editor
             Vector3 result = normalOne + normalTwo;
             result.Normalize();
 
-            Handles.color = Color.red;
-            Handles.DrawLine(pointTwo+result, pointTwo);
+            // Handles.color = Color.red;
+            // Handles.DrawLine(pointTwo+result, pointTwo);
 
-            Handles.color = Color.blue;
-            Handles.DrawLine(pointTwo+normalOne, pointTwo);
+            // Handles.color = Color.blue;
+            // Handles.DrawLine(pointTwo+normalOne, pointTwo);
 
-            Handles.color = Color.magenta;
-            Handles.DrawLine(pointTwo+normalTwo, pointTwo);
+            // Handles.color = Color.magenta;
+            // Handles.DrawLine(pointTwo+normalTwo, pointTwo);
         }
         Handles.color = Color.red;
         for (int i = 0; i < lines.Count; i++)

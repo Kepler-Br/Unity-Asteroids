@@ -13,6 +13,12 @@ public class AsteroidScript : MonoBehaviour
     public int canBeDestroyedTimes = 1;
     // For testing purposes.
     public bool isDestroyed = false;
+    private float hitpoints = 100.0f;
+
+    void Damage(float hitpoints)
+    {
+        this.hitpoints -= hitpoints;
+    }
 
     Vector3[] GenerateAsteroidVerticles()
     {
@@ -97,7 +103,10 @@ public class AsteroidScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isDestroyed)
+        if(this.hitpoints < 0.0f)
+            this.isDestroyed = true;
+            
+        if(this.isDestroyed)
         {
             if(canBeDestroyedTimes > 0)
             {
@@ -107,15 +116,6 @@ public class AsteroidScript : MonoBehaviour
                     CreateSmallerAsteroid();
             }
             Destroy(gameObject);
-        }
-    }
-
-    void OnCollisionEnter2D (Collision2D col)
-    {
-        Debug.Log(col.gameObject.tag);
-        if(col.gameObject.tag == "Bullet")
-        {
-            isDestroyed = true;
         }
     }
 }

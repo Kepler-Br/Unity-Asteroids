@@ -11,7 +11,10 @@ public class GameManager : MonoBehaviour
     public float spawnNewAsteroidEvery = 3.0f;
     private float spawnNewAsteroidTimer;
     public GameObject asteroidPrefab;
-    // Start is called before the first frame update
+
+    private float screenHeight;
+    private float screenWidth;
+
 
     void DeleteAsteroids()
     {

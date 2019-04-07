@@ -2,10 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerWeapons
+{
+    Square = 0,
+    Rocket,
+    Rapid
+}
+
 interface IPlayerWeapon
 {
     void Fire();
     void Update();
+    float GetNormalizedReloadTime();
 }
 
 public class RapidFireWeapon : IPlayerWeapon
@@ -16,11 +24,15 @@ public class RapidFireWeapon : IPlayerWeapon
 
     private const float reloadTime = 0.04f;
     private const string bulletPrefabName = "RapidFireBullet";
-    private const float bulletLifeTime = 1.0f;
+    private float bulletLifeTime = 1.0f;
     private const float bulletForce = 50.0f;
 
     private float reloadTimer = 0.0f;
 
+    public float GetNormalizedReloadTime()
+    {
+        return reloadTimer/reloadTime;
+    }
 
     public RapidFireWeapon(GameObject player)
     {
@@ -35,6 +47,7 @@ public class RapidFireWeapon : IPlayerWeapon
     {
         if (reloadTimer < 0.0f)
         {
+            bulletLifeTime = Random.Range(0.1f, 1.8f);
             reloadTimer = reloadTime;
             GameObject bullet = GameObject.Instantiate(bulletPrefab, playerPosition.position + playerPosition.up * 1.0f, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
@@ -81,6 +94,10 @@ public class SquareWeapon : IPlayerWeapon
 
     private float reloadTimer = 0.0f;
 
+    public float GetNormalizedReloadTime()
+    {
+        return reloadTimer/reloadTime;
+    }
 
     public SquareWeapon(GameObject player)
     {
@@ -117,13 +134,18 @@ public class RocketWeapon : IPlayerWeapon
     private Rigidbody2D playerRigidBody;
     private GameObject bulletPrefab;
 
-    private const float reloadTime = 1.3f;
+    private const float reloadTime = 2.3f;
     private const string bulletPrefabName = "RocketBullet";
     private const float bulletLifeTime = 5.0f;
-    private const float bulletForce = 1500.0f;
+    private const float bulletForce = 2500.0f;
 
     private float reloadTimer = 0.0f;
 
+
+    public float GetNormalizedReloadTime()
+    {
+        return reloadTimer/reloadTime;
+    }
 
     public RocketWeapon(GameObject player)
     {
@@ -162,13 +184,15 @@ public class PlayerScript : MonoBehaviour
     private GameManager gameManager;
     private Rigidbody2D playerRigidBody;
     private IPlayerWeapon currentWeapon;
+    Material selfMat;
 
     void Start()
     {
-        currentWeapon = new RocketWeapon(this.gameObject);
-
+        SetWeapon(PlayerWeapons.Rocket);
         gameManager = GameObject.FindObjectOfType<GameManager>();
         playerRigidBody = this.GetComponent<Rigidbody2D>();
+        selfMat = GetComponent<Renderer>().material;
+        selfMat.SetColor("_MainColor", Color.red);
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -179,6 +203,7 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
+        selfMat.SetColor("_MainColor", new Color(1.0f-this.currentWeapon.GetNormalizedReloadTime()/2.0f, 1.0f-this.currentWeapon.GetNormalizedReloadTime()/2.0f, 1.0f-this.currentWeapon.GetNormalizedReloadTime()/2.0f, 1.0f));
         currentWeapon.Update();
     }
 
@@ -201,6 +226,22 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             currentWeapon.Fire();
+        }
+    }
+
+    private void SetWeapon(PlayerWeapons weapon)
+    {
+        switch (weapon)
+        {
+            case PlayerWeapons.Rapid:
+                currentWeapon = new RapidFireWeapon(this.gameObject);
+                break;
+            case PlayerWeapons.Rocket:
+                currentWeapon = new RocketWeapon(this.gameObject);
+                break;
+            case PlayerWeapons.Square:
+                currentWeapon = new SquareWeapon(this.gameObject);
+                break;
         }
     }
 }

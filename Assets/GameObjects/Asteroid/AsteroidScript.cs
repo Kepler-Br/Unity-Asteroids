@@ -11,8 +11,6 @@ public class AsteroidScript : MonoBehaviour
     public float maxRadius = 5.0f;
     public float minRadius = 4.0f;
     public int canBeDestroyedTimes = 1;
-    // For testing purposes.
-    public bool isDestroyed = false;
     private float hitpoints = 100.0f;
 
     void Damage(float hitpoints)
@@ -81,16 +79,11 @@ public class AsteroidScript : MonoBehaviour
         this.maxRadius = maxRadius;
         this.minRadius = minRadius;
         this.canBeDestroyedTimes = canBeDestroyedTimes;
-        isDestroyed = false;
 
         Vector3[] circleVertices = GenerateAsteroidVerticles();
         SetupLineRenderer(circleVertices);
         SetupPolygonCollider2D(circleVertices);
         SetupRigidBody2D(circleVertices);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
     }
 
     void CreateSmallerAsteroid()
@@ -101,12 +94,9 @@ public class AsteroidScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        if(this.hitpoints < 0.0f)
-            this.isDestroyed = true;
-            
-        if(this.isDestroyed)
+                if(this.hitpoints < 0.0f)
         {
             if(canBeDestroyedTimes > 0)
             {
@@ -115,7 +105,7 @@ public class AsteroidScript : MonoBehaviour
                 for(int i = 0; i < asteroidNum; i++)
                     CreateSmallerAsteroid();
             }
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 }

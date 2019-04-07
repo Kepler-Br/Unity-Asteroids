@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletScript : MonoBehaviour
+public class PowerUpScript : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -14,14 +14,5 @@ public class BulletScript : MonoBehaviour
     void Update()
     {
         
-    }
-
-    void OnCollisionEnter2D (Collision2D col)
-    {
-        Debug.Log(col.gameObject.tag);
-        if(col.gameObject.tag == "Asteroid")
-        {
-            Destroy(gameObject);
-        }
     }
 }

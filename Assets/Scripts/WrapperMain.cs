@@ -28,22 +28,18 @@ public class WrapperMain : MonoBehaviour
         screenHeight = screenTopRight.y - screenBottomLeft.y;
     }
 
-    // TODO: remove simulteniously from childrens. (one function)
+
     void CreateGhosts()
     {
         for (int i = 0; i < 8; i++)
         {
-            ghosts[i] = Instantiate(gameObject, Vector3.zero, Quaternion.identity);
+            ghosts[i] = Instantiate(gameObject, this.transform.position, Quaternion.identity);
 
             DestroyImmediate(ghosts[i].GetComponent<WrapperMain>());
             var coms = ghosts[i].GetComponents<MonoBehaviour>();
             foreach (var com in coms)
                 Destroy(com);
         }
-
-        // for (int i = 0; i < 8; i++)
-            // ghosts[i].transform.parent = gameObject.transform;
-
     }
 
     void PositionGhosts()

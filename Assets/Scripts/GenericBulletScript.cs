@@ -6,11 +6,11 @@ public class GenericBulletScript : MonoBehaviour
 {
     public float damage = 1.0f;
 
-    void OnCollisionEnter2D(Collision2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Asteroid")
         {
-            col.gameObject.SendMessage("Damage", damage);
+            col.gameObject.SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
             Destroy(this.gameObject);
         }
     }

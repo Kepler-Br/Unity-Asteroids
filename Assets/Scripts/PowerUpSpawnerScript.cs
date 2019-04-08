@@ -5,8 +5,9 @@ using UnityEngine;
 public class PowerUpSpawnerScript : MonoBehaviour
 {
     public float spawnPowerUpTime = 50.0f;
-
     public float spawnPowerUpTimer = 0.0f;
+    public bool spawnPowerups = true;
+
     private GameObject[] powerUps;
     // Start is called before the first frame update
     void Start()
@@ -15,9 +16,10 @@ public class PowerUpSpawnerScript : MonoBehaviour
         spawnPowerUpTimer = spawnPowerUpTime;
         powerUps = new GameObject[] { UnityEngine.Resources.Load("Powerups/RandomWeapon") as GameObject,
                                       UnityEngine.Resources.Load("Powerups/RocketWeapon") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/SquareWeapon") as GameObject,
+                                    //   UnityEngine.Resources.Load("Powerups/SquareWeapon") as GameObject,
                                       UnityEngine.Resources.Load("Powerups/RapidWeapon") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/ClearScreenPowerUp") as GameObject };
+                                      UnityEngine.Resources.Load("Powerups/ChaingunWeapon") as GameObject,
+                                      UnityEngine.Resources.Load("Powerups/ClearScreenPowerUp") as GameObject, };
     }
     void SetPosition()
     {
@@ -28,16 +30,19 @@ public class PowerUpSpawnerScript : MonoBehaviour
 
         float screenHeight = screenTopRight.y - screenBottomLeft.y;
         const float powerUpSize = 4.0f;
-        this.transform.position = new Vector3(-screenHeight-powerUpSize, 0.0f, 0.0f);
+        this.transform.position = new Vector3(-screenHeight - powerUpSize, 0.0f, 0.0f);
     }
 
     void Update()
     {
-        spawnPowerUpTimer -= Time.deltaTime;
-        if (spawnPowerUpTimer < 0.0f)
+        if (spawnPowerups)
         {
-            SpawnPowerUp();
-            spawnPowerUpTimer = spawnPowerUpTime;
+            spawnPowerUpTimer -= Time.deltaTime;
+            if (spawnPowerUpTimer < 0.0f)
+            {
+                SpawnPowerUp();
+                spawnPowerUpTimer = spawnPowerUpTime;
+            }
         }
     }
 

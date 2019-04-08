@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 490c8c2924a6c027cac51d25963037d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: 2
+  weapon: 0
   isRandom: 0
   startYPosition: 0
 --- !u!1 &5603361182454404423

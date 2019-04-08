@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class WeaponPowerUpScript : MonoBehaviour
 {
-    public PlayerWeapons weapon;
+    public WeaponType weapon;
     public bool isRandom;
     private float sinTimer = 0.0f;
     public float startYPosition = 0.0f;
+    WeaponType[] allowedRandomWeapons = {WeaponType.Chaingun,
+                                         WeaponType.RapidFire,
+                                         WeaponType.Rockets,};
 
     void FixedUpdate()
     {
@@ -26,9 +29,13 @@ public class WeaponPowerUpScript : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            PlayerWeapons selectedWeapon;
+            WeaponType selectedWeapon;
             if (isRandom)
-                selectedWeapon = (PlayerWeapons)Random.Range(0, 3);
+            {
+                int length = allowedRandomWeapons.Length;
+                int index = Random.Range(0, length);
+                selectedWeapon = allowedRandomWeapons[index];
+            }
             else
                 selectedWeapon = weapon;
             col.gameObject.SendMessage("SetWeapon", selectedWeapon);

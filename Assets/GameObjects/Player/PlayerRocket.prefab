@@ -100,6 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrustForce: 100
   rotationSpeed: 6
+  weaponTimeout: 15
 --- !u!114 &8410094216231018577
 MonoBehaviour:
   m_ObjectHideFlags: 0

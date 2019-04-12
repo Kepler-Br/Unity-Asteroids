@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 6756283656538489310}
   m_Layer: 0
   m_Name: ChaingunWeapon
-  m_TagString: Untagged
+  m_TagString: Powerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

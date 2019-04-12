@@ -2,25 +2,78 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// public 
 public class GameManager : MonoBehaviour
 {
+
     public enum GameState { StartState = 0, PlayingState, GameOverState };
     public GameState gameState;
     public int firstSpawnCount = 10;
     public float spawnNewAsteroidEvery = 3.0f;
-    private float spawnNewAsteroidTimer;
     public GameObject asteroidPrefab;
+    public GameObject powerUpSpawner;
 
+    private float spawnNewAsteroidTimer;
     private float screenHeight;
     private float screenWidth;
 
 
-    void DeleteAsteroids()
+    void Start()
+    {
+        spawnNewAsteroidTimer = spawnNewAsteroidEvery;
+        for (int i = 0; i < firstSpawnCount; i++)
+        {
+            int choice = Random.Range(0, 2);
+            if (choice == 0)
+                CreateAsteroidBig();
+            else
+                CreateAsteroidSmall();
+        }
+    }
+
+    void ClearPlayField()
     {
         GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
         for (int i = 0; i < asteroids.Length; i++)
             Destroy(asteroids[i]);
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        for (int i = 0; i < bullets.Length; i++)
+            Destroy(bullets[i]);
+        GameObject[] powerups = GameObject.FindGameObjectsWithTag("Powerup");
+        for (int i = 0; i < powerups.Length; i++)
+            Destroy(powerups[i]);
+    }
+
+    void OnGameOver()
+    {
+        gameState = GameState.GameOverState;
+        powerUpSpawner.SendMessage("OnGameOver");
+    }
+
+    void OnPlayerRestart()
+    {
+        gameState = GameState.PlayingState;
+        spawnNewAsteroidTimer = spawnNewAsteroidEvery;
+        powerUpSpawner.SendMessage("OnPlayerReplay");
+        SpawnStartAsteroids();
+    }
+
+    void OnPlayerRespawn()
+    {
+        powerUpSpawner.SendMessage("OnPlayerRespawn");
+        spawnNewAsteroidTimer = spawnNewAsteroidEvery;
+        SpawnStartAsteroids();
+    }
+
+    void SpawnStartAsteroids()
+    {
+        for (int i = 0; i < firstSpawnCount; i++)
+        {
+            int choice = Random.Range(0, 2);
+            if (choice == 0)
+                CreateAsteroidBig();
+            else
+                CreateAsteroidSmall();
+        }
     }
 
     void CreateAsteroidBig()
@@ -55,35 +108,26 @@ public class GameManager : MonoBehaviour
         asteroidScript.Initialize(maxRadius, minRadius, 1);
     }
 
-    void Start()
-    {
-        spawnNewAsteroidTimer = spawnNewAsteroidEvery;
-        for (int i = 0; i < firstSpawnCount; i++)
-        {
-            int choice = Random.Range(0, 2);
-            if (choice == 0)
-                CreateAsteroidBig();
-            else
-                CreateAsteroidSmall();
-        }
-    }
-
     // Update is called once per frame
     void Update()
     {
-        spawnNewAsteroidTimer -= Time.deltaTime;
+        if (gameState == GameState.PlayingState)
+            spawnNewAsteroidTimer -= Time.deltaTime;
     }
 
     void FixedUpdate()
     {
-        if (spawnNewAsteroidTimer < 0.0f)
+        if (gameState == GameState.PlayingState)
         {
-            int choice = Random.Range(0, 2);
-            if (choice == 0)
-                CreateAsteroidBig();
-            else
-                CreateAsteroidSmall();
-            spawnNewAsteroidTimer = 3.0f;
+            if (spawnNewAsteroidTimer < 0.0f)
+            {
+                int choice = Random.Range(0, 2);
+                if (choice == 0)
+                    CreateAsteroidBig();
+                else
+                    CreateAsteroidSmall();
+                spawnNewAsteroidTimer = 3.0f;
+            }
         }
     }
 }

@@ -59,4 +59,21 @@ public class PowerUpSpawnerScript : MonoBehaviour
         const float destroyPowerUpTime = 18.0f;
         Destroy(powerUp, destroyPowerUpTime);
     }
+
+    void OnGameOver()
+    {
+        spawnPowerups = false;
+    }
+
+    void OnPlayerReplay()
+    {
+        spawnPowerUpTimer = spawnPowerUpTime;
+        spawnPowerups = true;
+    }
+
+    void OnPlayerRespawn()
+    {
+        spawnPowerUpTimer = spawnPowerUpTime;
+        spawnPowerups = true;
+    }
 }

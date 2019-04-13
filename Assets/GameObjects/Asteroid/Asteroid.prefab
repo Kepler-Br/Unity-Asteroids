@@ -53,7 +53,6 @@ MonoBehaviour:
   maxRadius: 50
   minRadius: 4
   canBeDestroyedTimes: 1
-  isDestroyed: 0
 --- !u!114 &4836855554032178720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,7 +70,7 @@ MonoBehaviour:
   - {x: -1, y: 0, z: 0}
   - {x: 1, y: 1, z: 0}
   autoupdate: 0
-  lineWidth: 0.2
+  lineWidth: 0.1
 --- !u!60 &2929092247371747118
 PolygonCollider2D:
   m_ObjectHideFlags: 0

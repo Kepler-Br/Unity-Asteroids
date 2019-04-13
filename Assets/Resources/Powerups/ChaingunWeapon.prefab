@@ -285,7 +285,7 @@ MonoBehaviour:
   - {x: 1, y: -1, z: 0}
   - {x: -1, y: -1, z: 0}
   autoupdate: 1
-  lineWidth: 0.2
+  lineWidth: 0.1
 --- !u!61 &7722329931925152270
 BoxCollider2D:
   m_ObjectHideFlags: 0

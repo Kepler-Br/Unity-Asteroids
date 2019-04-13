@@ -22,7 +22,7 @@ public class RocketBulletScript : MonoBehaviour
 
     void SpawnSplinters(int count)
     {
-        GameObject splinterPrefab = UnityEngine.Resources.Load("SquareBullet") as GameObject;
+        GameObject splinterPrefab = UnityEngine.Resources.Load("Bullets/RocketSplinter") as GameObject;
         float degreeStep = Mathf.PI / count;
         const float splinterSpeed = 2000.0f;
         const float splinterLifeTime = 3.0f;

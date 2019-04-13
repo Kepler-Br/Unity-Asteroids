@@ -100,7 +100,7 @@ MonoBehaviour:
   - {x: 1, y: -1, z: 0}
   - {x: -1, y: -1, z: 0}
   autoupdate: 1
-  lineWidth: 0.2
+  lineWidth: 0.1
 --- !u!61 &7949847535629098608
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -190,7 +190,7 @@ MonoBehaviour:
   - {x: -0.5, y: -0.6, z: 0}
   - {x: 0.5, y: -0.6, z: 0}
   autoupdate: 1
-  lineWidth: 0.2
+  lineWidth: 0.1
 --- !u!23 &7297706312031707548
 MeshRenderer:
   m_ObjectHideFlags: 0

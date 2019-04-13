@@ -35,11 +35,13 @@ public class LineCreator : MonoBehaviour
             return;
         this.lines.Clear();
         this.lines.AddRange(points);
+        UpdateMesh();
     }
 
     public void AddPoint(Vector3 point)
     {
         this.lines.Add(point);
+        UpdateMesh();
     }
 
     public void RemoveLastPoint()
@@ -198,6 +200,7 @@ public class LineCreator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         var meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = CreateMesh();
     }

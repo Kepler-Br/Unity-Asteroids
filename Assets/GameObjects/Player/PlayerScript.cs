@@ -8,6 +8,7 @@ public class PlayerScript : MonoBehaviour
     public float rotationSpeed = 3.0f;
     public float weaponTimeout = 15.0f;
     public GameObject destroyedShipPrefab;
+    public GameObject playerLivesDisplay;
     public int lives = 3;
 
     private GameManager gameManager;
@@ -23,7 +24,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         meshRenderer = this.GetComponent<MeshRenderer>();
-        currentWeapon = new RocketWeapon(this.gameObject);
+        currentWeapon = new StingerWeapon(this.gameObject);
         gameManager = GameObject.FindObjectOfType<GameManager>();
         playerRigidBody = this.GetComponent<Rigidbody2D>();
         material = GetComponent<Renderer>().material;
@@ -54,6 +55,9 @@ public class PlayerScript : MonoBehaviour
             case WeaponType.SquareWeapon:
                 currentWeapon = new SquareWeapon(this.gameObject);
                 break;
+            case WeaponType.Stinger:
+                currentWeapon = new StingerWeapon(this.gameObject);
+                break;
         }
     }
 
@@ -82,6 +86,7 @@ public class PlayerScript : MonoBehaviour
         this.transform.rotation = Quaternion.identity;
         destroyed = true;
         playerRigidBody.velocity = Vector2.zero;
+        playerLivesDisplay.SendMessage("SetIconCount", lives);
     }
 
     void OnDeathAnimationEnd()
@@ -98,6 +103,7 @@ public class PlayerScript : MonoBehaviour
         gameManager.SendMessage("OnPlayerRestart");
         meshRenderer.enabled = true;
         destroyed = false;
+        playerLivesDisplay.SendMessage("SetIconCount", lives);
     }
 
     void Update()
@@ -144,23 +150,32 @@ public class PlayerScript : MonoBehaviour
         }
         if (destroyed)
             return;
-        if (Input.GetKey(KeyCode.A))
-            transform.Rotate(0.0f, 0.0f, rotationSpeed);
-        if (Input.GetKey(KeyCode.D))
-            transform.Rotate(0.0f, 0.0f, -rotationSpeed);
 
-        if (Input.GetKey(KeyCode.W))
-        {
-            playerRigidBody.AddForce(this.transform.up * this.thrustForce);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            playerRigidBody.AddForce(-this.transform.up * this.thrustForce);
-        }
 
-        if (Input.GetKey(KeyCode.Space))
-        {
+        float verticalMovement = Input.GetAxis("Vertical-keyboard");
+        playerRigidBody.AddForce(this.transform.up * this.thrustForce * verticalMovement);
+
+        float fire = Input.GetAxis("Fire");
+        if (fire > 0.0f)
             currentWeapon.Fire();
+
+        float rotation = Input.GetAxis("Horizontal-keyboard");
+        transform.Rotate(0.0f, 0.0f, -rotationSpeed * rotation);
+
+        float joystickY = Input.GetAxis("Vertical-joystick");
+        float joystickX = Input.GetAxis("Horizontal-joystick");
+        Vector3 resultMovement = new Vector3(joystickX, joystickY, 0.0f);
+        playerRigidBody.AddForce(resultMovement * this.thrustForce);
+        float angle = Vector3.Angle(Vector3.left, resultMovement);
+
+        float aimAngle = Mathf.Atan2(-joystickX, joystickY) * Mathf.Rad2Deg;
+
+        if (joystickY != 0 && joystickX != 0)
+
+        {
+            this.transform.rotation = Quaternion.AngleAxis(aimAngle, Vector3.forward);
         }
+        // transform.rotation  = Quaternion.LookRotation(resultMovement);
+
     }
 }

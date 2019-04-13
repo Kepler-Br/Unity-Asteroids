@@ -16,7 +16,7 @@ public class ClearScreenPowerUp : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            gameManager.SendMessage("DeleteAsteroids");
+            gameManager.SendMessage("ClearPlayField");
             Destroy(this.gameObject);
         }
     }

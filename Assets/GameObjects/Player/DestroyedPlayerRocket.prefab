@@ -94,7 +94,7 @@ MonoBehaviour:
   - {x: -0.4, y: -1, z: 0}
   - {x: 0, y: 1, z: 0}
   autoupdate: 0
-  lineWidth: 0.2
+  lineWidth: 0.1
 --- !u!1 &2309858964968209751
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +189,7 @@ MonoBehaviour:
   - {x: 0.4, y: -1, z: 0}
   - {x: -0.4, y: -1, z: 0}
   autoupdate: 0
-  lineWidth: 0.2
+  lineWidth: 0.1
 --- !u!1 &6999291920184892442
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,7 +284,7 @@ MonoBehaviour:
   - {x: 0.4, y: -1, z: 0}
   - {x: 0, y: 1, z: 0}
   autoupdate: 0
-  lineWidth: 0.2
+  lineWidth: 0.1
 --- !u!1 &8904011473623893976
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,4 +331,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ae0cafbb7e6e6c71847cb7fb973704b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rebuildAnimation: 1
   explosionStrength: 1

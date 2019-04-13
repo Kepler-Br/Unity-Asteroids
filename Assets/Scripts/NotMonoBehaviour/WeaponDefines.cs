@@ -7,7 +7,8 @@ public enum WeaponType
     RapidFire = 0,
     Rockets,
     SquareWeapon,
-    Chaingun
+    Chaingun,
+    Stinger
 }
 
 interface IPlayerWeapon
@@ -24,6 +25,7 @@ public class RapidFireWeapon : IPlayerWeapon
     private GameObject bulletPrefab;
 
     private const float reloadTime = 0.04f;
+    private const string bulletsFolderName = "Bullets/";
     private const string bulletPrefabName = "RapidFireBullet";
     private const float bulletLifeTime = 1.0f;
     private const float bulletForce = 50.0f;
@@ -39,7 +41,7 @@ public class RapidFireWeapon : IPlayerWeapon
     {
         this.playerPosition = player.transform;
         this.playerRigidBody = player.GetComponent<Rigidbody2D>();
-        this.bulletPrefab = UnityEngine.Resources.Load(bulletPrefabName) as GameObject;
+        this.bulletPrefab = UnityEngine.Resources.Load(bulletsFolderName + bulletPrefabName) as GameObject;
         if (this.bulletPrefab == null)
             Debug.LogError("Cannot load bullet prefab by name(null reference): " + bulletPrefabName);
     }
@@ -89,7 +91,8 @@ public class ChaingunWeapon : IPlayerWeapon
 
     private const float reloadTime = 0.3f;
     private const string bulletPrefabName = "SquareBullet";
-    private const float bulletLifeTime = 2.5f;
+    private const string bulletsFolderName = "Bullets/";
+    private const float bulletLifeTime = 4.5f;
     private const float bulletForce = 500.0f;
 
     private float reloadTimer = 0.0f;
@@ -106,7 +109,7 @@ public class ChaingunWeapon : IPlayerWeapon
     {
         this.playerPosition = player.transform;
         this.playerRigidBody = player.GetComponent<Rigidbody2D>();
-        this.bulletPrefab = UnityEngine.Resources.Load(bulletPrefabName) as GameObject;
+        this.bulletPrefab = UnityEngine.Resources.Load(bulletsFolderName + bulletPrefabName) as GameObject;
         if (this.bulletPrefab == null)
             Debug.LogError("Cannot load bullet prefab by name(null reference): " + bulletPrefabName);
     }
@@ -143,6 +146,7 @@ public class SquareWeapon : IPlayerWeapon
 
     private const float reloadTime = 1.0f;
     private const string bulletPrefabName = "SquareBullet";
+    private const string bulletsFolderName = "Bullets/";
     private const float bulletLifeTime = 5.0f;
     private const float bulletForce = 1000.0f;
 
@@ -157,7 +161,7 @@ public class SquareWeapon : IPlayerWeapon
     {
         this.playerPosition = player.transform;
         this.playerRigidBody = player.GetComponent<Rigidbody2D>();
-        this.bulletPrefab = UnityEngine.Resources.Load(bulletPrefabName) as GameObject;
+        this.bulletPrefab = UnityEngine.Resources.Load(bulletsFolderName + bulletPrefabName) as GameObject;
         if (this.bulletPrefab == null)
             Debug.LogError("Cannot load bullet prefab by name(null reference): " + bulletPrefabName);
     }
@@ -190,6 +194,7 @@ public class RocketWeapon : IPlayerWeapon
 
     private const float reloadTime = 1.3f;
     private const string bulletPrefabName = "RocketBullet";
+    private const string bulletsFolderName = "Bullets/";
     private const float bulletLifeTime = 5.0f;
     private const float bulletForce = 1500.0f;
 
@@ -197,14 +202,14 @@ public class RocketWeapon : IPlayerWeapon
 
     public float GetNormalizedReloadTime()
     {
-        return reloadTimer/reloadTime;
+        return reloadTimer / reloadTime;
     }
-    
+
     public RocketWeapon(GameObject player)
     {
         this.playerPosition = player.transform;
         this.playerRigidBody = player.GetComponent<Rigidbody2D>();
-        this.bulletPrefab = UnityEngine.Resources.Load(bulletPrefabName) as GameObject;
+        this.bulletPrefab = UnityEngine.Resources.Load(bulletsFolderName + bulletPrefabName) as GameObject;
         if (this.bulletPrefab == null)
             Debug.LogError("Cannot load bullet prefab by name(null reference): " + bulletPrefabName);
     }
@@ -219,6 +224,56 @@ public class RocketWeapon : IPlayerWeapon
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
             bulletRigidBody.AddForce(playerPosition.up * bulletForce);
             playerRigidBody.AddForce(-playerPosition.up * bulletForce);
+        }
+    }
+
+    public void Update()
+    {
+        if (reloadTimer >= 0.0f)
+            reloadTimer -= Time.deltaTime;
+    }
+}
+
+public class StingerWeapon : IPlayerWeapon
+{
+    private Transform playerPosition;
+    private Rigidbody2D playerRigidBody;
+    private GameObject bulletPrefab;
+
+    private const float reloadTime = 1.00f;
+    private const string bulletsFolderName = "Bullets/";
+    private const string bulletPrefabName = "StingerBullet";
+    private const float bulletLifeTime = 2.0f;
+    private const float bulletForce = 2000.0f;
+
+    private float reloadTimer = 0.0f;
+
+    public float GetNormalizedReloadTime()
+    {
+        return reloadTimer / reloadTime;
+    }
+
+    public StingerWeapon(GameObject player)
+    {
+        this.playerPosition = player.transform;
+        this.playerRigidBody = player.GetComponent<Rigidbody2D>();
+        this.bulletPrefab = UnityEngine.Resources.Load(bulletsFolderName + bulletPrefabName) as GameObject;
+        if (this.bulletPrefab == null)
+            Debug.LogError("Cannot load bullet prefab by name(null reference): " + bulletPrefabName);
+    }
+
+    public void Fire()
+    {
+        if (reloadTimer < 0.0f)
+        {
+            reloadTimer = reloadTime;
+            GameObject bullet = GameObject.Instantiate(bulletPrefab, playerPosition.position + playerPosition.up * 1.0f, playerPosition.rotation);
+            GameObject.Destroy(bullet, bulletLifeTime);
+            Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
+            bulletRigidBody.AddForce(playerPosition.up*bulletForce + (Vector3)playerRigidBody.velocity * 4.0f);
+            playerRigidBody.AddForce(-playerPosition.up * bulletForce);
+
+
         }
     }
 

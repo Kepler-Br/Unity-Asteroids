@@ -101,6 +101,9 @@ MonoBehaviour:
   thrustForce: 100
   rotationSpeed: 6
   weaponTimeout: 15
+  destroyedShipPrefab: {fileID: 0}
+  playerLivesDisplay: {fileID: 0}
+  lives: 3
 --- !u!114 &8410094216231018577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,7 +134,7 @@ MonoBehaviour:
   - {x: 0.4, y: -1, z: 0}
   - {x: -0.4, y: -1, z: 0}
   autoupdate: 1
-  lineWidth: 0.2
+  lineWidth: 0.1
 --- !u!23 &1294668329098774436
 MeshRenderer:
   m_ObjectHideFlags: 0

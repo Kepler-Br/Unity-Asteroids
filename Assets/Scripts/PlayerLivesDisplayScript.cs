@@ -4,55 +4,41 @@ using UnityEngine;
 
 public class PlayerLivesDisplayScript : MonoBehaviour
 {
-    Stack<GameObject> liveIcons = new Stack<GameObject>();
-    GameObject playerIconPrefab;
+    [SerializeField] private GameObject[] liveIcons;
     private int lives = 0;
-    public int startIconCount = 3;
 
-    // Start is called before the first frame update
-    void Start()
+    int maxHealth;
+
+    void Awake()
     {
-        playerIconPrefab = UnityEngine.Resources.Load("PlayerIcon") as GameObject;
-        SetIconCount(startIconCount);
+        maxHealth = liveIcons.Length;
+        lives = maxHealth;
+        GameEvents.GameRestart += OnGameRestart;
+        GameEvents.PlayerDeath += OnPlayerDeath;
+        GameEvents.HealthPickup += OnHealthPickup;
     }
 
-    void AddIcon()
+    void OnHealthPickup()
     {
-        const float distanceBetweenIcons = 2.0f;
-        int liveIconsCount = liveIcons.Count;
-        float xPosition = this.transform.position.x + distanceBetweenIcons * liveIconsCount;
-        float yPosition = this.transform.position.y;
-        Vector3 playerIconPosition = new Vector3(xPosition, yPosition, 0.0f);
-        GameObject liveIcon = Instantiate(playerIconPrefab, playerIconPosition, Quaternion.identity);
-        liveIcon.transform.parent = this.transform;
-        this.liveIcons.Push(liveIcon);
+        SetHealth(++lives);
     }
 
-    void RemoveIcon()
+    void OnGameRestart()
     {
-        if (liveIcons.Count == 0)
-            return;
-        lives--;
-        GameObject liveIcon = this.liveIcons.Pop();
-        Destroy(liveIcon);
+        SetHealth(3);
     }
 
-    void SetIconCount(int count)
+    void OnPlayerDeath()
     {
-        int liveIconCount = liveIcons.Count;
-        if (count > liveIcons.Count)
-        {
-            for (int i = 0; i < count - liveIconCount; i++)
-            {
-                this.AddIcon();
-            }
-        }
-        else if (count < liveIcons.Count)
-        {
-            for (int i = 0; i < liveIconCount - count; i++)
-            {
-                this.RemoveIcon();
-            }
-        }
+        SetHealth(--lives);
+    }
+
+    void SetHealth(int newHealth)
+    {
+        newHealth = newHealth > liveIcons.Length ? liveIcons.Length : newHealth;
+        foreach (var liveIcon in this.liveIcons)
+            liveIcon.SetActive(false);
+        for (int i = 0; i < newHealth; i++)
+            liveIcons[i].SetActive(true);
     }
 }

@@ -10,7 +10,7 @@ public class PowerUpSpawnerScript : MonoBehaviour
 
     private GameObject[] powerUps;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         this.SetPosition();
         spawnPowerUpTimer = spawnPowerUpTime;
@@ -19,7 +19,13 @@ public class PowerUpSpawnerScript : MonoBehaviour
                                     //   UnityEngine.Resources.Load("Powerups/SquareWeapon") as GameObject,
                                       UnityEngine.Resources.Load("Powerups/RapidWeapon") as GameObject,
                                       UnityEngine.Resources.Load("Powerups/ChaingunWeapon") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/ClearScreenPowerUp") as GameObject, };
+                                      UnityEngine.Resources.Load("Powerups/ClearScreenPowerUp") as GameObject,
+                                      UnityEngine.Resources.Load("Powerups/ShotgunPowerUp") as GameObject, };
+        GameEvents.GameOver += StopSpawn;
+        GameEvents.PlayerDeath += StopSpawn;
+        GameEvents.PlayerRespawn += StartSpawn;
+        GameEvents.GameRestart += StartSpawn;
+
     }
     void SetPosition()
     {
@@ -60,18 +66,13 @@ public class PowerUpSpawnerScript : MonoBehaviour
         Destroy(powerUp, destroyPowerUpTime);
     }
 
-    void OnGameOver()
+    void StopSpawn()
     {
+        spawnPowerUpTimer = spawnPowerUpTime;
         spawnPowerups = false;
     }
 
-    void OnPlayerReplay()
-    {
-        spawnPowerUpTimer = spawnPowerUpTime;
-        spawnPowerups = true;
-    }
-
-    void OnPlayerRespawn()
+    void StartSpawn()
     {
         spawnPowerUpTimer = spawnPowerUpTime;
         spawnPowerups = true;

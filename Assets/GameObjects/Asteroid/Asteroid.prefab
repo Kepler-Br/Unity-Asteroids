@@ -49,10 +49,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b06a879b859080ecb6c6a15c2033ebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   asteroidPrefab: {fileID: 2929092247371747026}
-  maxRadius: 50
-  minRadius: 4
-  canBeDestroyedTimes: 1
+  destroyedParticles: {fileID: 5494240909023990013, guid: e57041bdaf6e70febbb9837a1fca5c9d,
+    type: 3}
+  isCrushableToSmallerAsteroids: 0
+  hitpoints: 0
 --- !u!114 &4836855554032178720
 MonoBehaviour:
   m_ObjectHideFlags: 0

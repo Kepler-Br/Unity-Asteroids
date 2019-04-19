@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -8,12 +9,12 @@ public class PlayerScript : MonoBehaviour
     public float rotationSpeed = 3.0f;
     public float weaponTimeout = 15.0f;
     public GameObject destroyedShipPrefab;
-    public GameObject playerLivesDisplay;
+    public GameObject rocketExhaust;
     public int lives = 3;
 
     private GameManager gameManager;
     private Rigidbody2D playerRigidBody;
-    private IPlayerWeapon currentWeapon;
+    private PlayerWeapon currentWeapon;
     MeshRenderer meshRenderer;
     private Material material;
     private float weaponTimeoutTimer = 0.0f;
@@ -24,7 +25,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         meshRenderer = this.GetComponent<MeshRenderer>();
-        currentWeapon = new StingerWeapon(this.gameObject);
+        currentWeapon = new ShotgunWeapon(this.gameObject);
         gameManager = GameObject.FindObjectOfType<GameManager>();
         playerRigidBody = this.GetComponent<Rigidbody2D>();
         material = GetComponent<Renderer>().material;
@@ -57,6 +58,13 @@ public class PlayerScript : MonoBehaviour
                 break;
             case WeaponType.Stinger:
                 currentWeapon = new StingerWeapon(this.gameObject);
+                isCustomWeapon = true;
+                weaponTimeoutTimer = weaponTimeout;
+                break;
+            case WeaponType.Shotgun:
+                currentWeapon = new ShotgunWeapon(this.gameObject);
+                isCustomWeapon = true;
+                weaponTimeoutTimer = weaponTimeout;
                 break;
         }
     }
@@ -69,7 +77,7 @@ public class PlayerScript : MonoBehaviour
             gameManager.SendMessage("ClearPlayField");
             LiveLost();
             if (lives == 0)
-                gameManager.SendMessage("OnGameOver");
+                GameEvents.OnGameOver();
         }
     }
 
@@ -86,24 +94,25 @@ public class PlayerScript : MonoBehaviour
         this.transform.rotation = Quaternion.identity;
         destroyed = true;
         playerRigidBody.velocity = Vector2.zero;
-        playerLivesDisplay.SendMessage("SetIconCount", lives);
+        rocketExhaust.SetActive(false);
+
+        GameEvents.OnPlayerDeath();
     }
 
     void OnDeathAnimationEnd()
     {
-
         meshRenderer.enabled = true;
         destroyed = false;
-        gameManager.SendMessage("OnPlayerRespawn");
+        GameEvents.OnPlayerRespawn();
     }
 
     void Replay()
     {
         lives = 3;
-        gameManager.SendMessage("OnPlayerRestart");
         meshRenderer.enabled = true;
         destroyed = false;
-        playerLivesDisplay.SendMessage("SetIconCount", lives);
+
+        GameEvents.OnGameRestart();
     }
 
     void Update()
@@ -151,8 +160,12 @@ public class PlayerScript : MonoBehaviour
         if (destroyed)
             return;
 
-
         float verticalMovement = Input.GetAxis("Vertical-keyboard");
+        if (verticalMovement > 0.0f)
+            rocketExhaust.SetActive(true);
+        else
+            rocketExhaust.SetActive(false);
+
         playerRigidBody.AddForce(this.transform.up * this.thrustForce * verticalMovement);
 
         float fire = Input.GetAxis("Fire");

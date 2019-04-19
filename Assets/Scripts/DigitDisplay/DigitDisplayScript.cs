@@ -1,31 +1,43 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DigitDisplayScript : MonoBehaviour
 {
-    private const int digitCount = 8;
-    private const float spaceBetweenDigits = 1.5f;
-
-    private DigitObjectScript[] digits;
-    private GameObject digitPrefab;
+    [SerializeField]
+    private int score = 0;
+    private const uint digitCount = 5;
+    private Text textMesh;
 
     void Start()
     {
-        digitPrefab = UnityEngine.Resources.Load("DigitObject") as GameObject;
-        digits = new DigitObjectScript[digitCount];
-        for(int i = 0; i < digitCount; i++)
-        {
-            Vector3 digitPosition = this.transform.position+Vector3.right*spaceBetweenDigits*i;
-            GameObject digitGameObject = Instantiate(digitPrefab, digitPosition, Quaternion.identity);
-            DigitObjectScript digitScript = digitGameObject.GetComponent<DigitObjectScript>();
-            digits[i] = digitScript;
-        }
+        textMesh = this.GetComponent<Text>();
+        score = 0;
+        UpdateDisplay();
+
+        GameEvents.GameRestart += OnGameRestart;
+        GameEvents.AsteroidDestroyed += OnAsteroidDestroyed;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    void OnGameRestart()
     {
-        
+        score = 0;
+        this.UpdateDisplay();
+    }
+
+    void OnAsteroidDestroyed(int score)
+    {
+        this.score += score;
+        this.UpdateDisplay();
+    }
+
+    void UpdateDisplay()
+    {
+        uint digitsInScore = (uint)Mathf.Log10(score);
+        digitsInScore = digitsInScore > digitCount ? digitCount : digitsInScore;
+        textMesh.text = new string('0', (int)(digitCount - digitsInScore));
+        textMesh.text += score.ToString();
     }
 }

@@ -145,7 +145,7 @@ public class RapidFireWeapon : PlayerWeapon
         {
             reloadTimer = reloadTime;
             Vector3 bulletPosition = playerPosition.position + playerPosition.up * 1.0f;
-            SpawnParticle(bulletPosition);
+            // SpawnParticle(bulletPosition);
             GameObject bullet = GameObject.Instantiate(bulletPrefab, bulletPosition, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
@@ -178,9 +178,9 @@ public class ChaingunWeapon : PlayerWeapon
 
     public ChaingunWeapon(GameObject player) : base(player, "SquareBullet")
     {
-        reloadTime = 0.3f;
+        reloadTime = 0.1f;
         bulletLifeTime = 4.5f;
-        bulletForce = 5000.0f;
+        bulletForce = 1000.0f;
     }
 
     public override void Fire()
@@ -207,7 +207,7 @@ public class SquareWeapon : PlayerWeapon
 {
     public SquareWeapon(GameObject player) : base(player, "SquareBullet")
     {
-        reloadTime = 1.0f;
+        reloadTime = 0.3f;
         bulletLifeTime = 5.0f;
         bulletForce = 1000.0f;
     }

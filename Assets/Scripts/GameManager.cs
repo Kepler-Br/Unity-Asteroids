@@ -8,28 +8,30 @@ public class GameManager : MonoBehaviour
     public enum GameState { StartState = 0, PlayingState, GameOverState };
     public GameState gameState;
     public int firstSpawnCount = 10;
-    public float spawnNewAsteroidEvery = 3.0f;
+    public float spawnNewAsteroidEvery = 1.0f;
     public GameObject asteroidPrefab;
-    public GameObject powerUpSpawner;
-    public DigitDisplayScript digitDisplayScript;
 
     private float spawnNewAsteroidTimer;
     private float screenHeight;
     private float screenWidth;
+    private bool spawningAsteroids = true;
 
 
-    void Start()
+    void Awake()
     {
-        digitDisplayScript = GameObject.FindObjectOfType<DigitDisplayScript>();
         spawnNewAsteroidTimer = spawnNewAsteroidEvery;
-        for (int i = 0; i < firstSpawnCount; i++)
-        {
-            CreateAsteroid();
-        }
+
+        GameEvents.GameOver += OnGameOver;
+        GameEvents.PlayerDeath += OnPlayerDeath;
+        GameEvents.PlayerRespawn += OnPlayerRespawn;
+        GameEvents.GameRestart += OnGameRestart;
     }
 
-    void ClearPlayField()
+    void OnPlayerDeath()
     {
+        spawnNewAsteroidTimer = spawnNewAsteroidEvery;
+        spawningAsteroids = false;
+
         GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
         for (int i = 0; i < asteroids.Length; i++)
             Destroy(asteroids[i]);
@@ -43,23 +45,23 @@ public class GameManager : MonoBehaviour
 
     void OnGameOver()
     {
+        spawnNewAsteroidTimer = spawnNewAsteroidEvery;
         gameState = GameState.GameOverState;
-        powerUpSpawner.SendMessage("OnGameOver");
     }
 
-    void OnPlayerRestart()
+    void OnGameRestart()
     {
+        spawningAsteroids = true;
         gameState = GameState.PlayingState;
         spawnNewAsteroidTimer = spawnNewAsteroidEvery;
-        powerUpSpawner.SendMessage("OnPlayerReplay");
-        SpawnStartAsteroids();
+        // SpawnStartAsteroids();
     }
 
     void OnPlayerRespawn()
     {
-        powerUpSpawner.SendMessage("OnPlayerRespawn");
+        spawningAsteroids = true;
         spawnNewAsteroidTimer = spawnNewAsteroidEvery;
-        SpawnStartAsteroids();
+        // SpawnStartAsteroids();
     }
 
     void SpawnStartAsteroids()
@@ -80,8 +82,8 @@ public class GameManager : MonoBehaviour
 
         GameObject asteroid = Instantiate(asteroidPrefab, spawnPoint, Quaternion.identity);
         AsteroidScript asteroidScript = asteroid.GetComponent<AsteroidScript>();
-        const float maxRadius = 9.0f;
-        const float minRadius = 3.0f;
+        const float maxRadius = 5.0f;
+        const float minRadius = 2.0f;
         float asteroidRadius = Random.Range(minRadius, maxRadius);
         asteroidScript.Initialize(asteroidRadius);
     }
@@ -89,7 +91,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameState == GameState.PlayingState)
+        if (gameState == GameState.PlayingState && spawningAsteroids)
             spawnNewAsteroidTimer -= Time.deltaTime;
     }
 

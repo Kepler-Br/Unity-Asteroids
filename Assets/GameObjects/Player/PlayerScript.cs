@@ -25,7 +25,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         meshRenderer = this.GetComponent<MeshRenderer>();
-        currentWeapon = new ShotgunWeapon(this.gameObject);
+        currentWeapon = new ChaingunWeapon(this.gameObject);
         gameManager = GameObject.FindObjectOfType<GameManager>();
         playerRigidBody = this.GetComponent<Rigidbody2D>();
         material = GetComponent<Renderer>().material;
@@ -74,7 +74,6 @@ public class PlayerScript : MonoBehaviour
         if (col.gameObject.tag == "Asteroid")
         {
             lives--;
-            gameManager.SendMessage("ClearPlayField");
             LiveLost();
             if (lives == 0)
                 GameEvents.OnGameOver();

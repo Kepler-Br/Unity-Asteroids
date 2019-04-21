@@ -14,7 +14,11 @@ public class GameEvents
     public static Action GameRestart;
     public static Action HealthPickup;
     public static Action<int> AsteroidDestroyed;
+    public static Action<GameState> GameStateChanged;
+    public static Action PowerupPickup;
 
+    public static void OnPowerupPickup() => PowerupPickup?.Invoke();
+    public static void OnGameStateChanged(GameState gameState) => GameStateChanged?.Invoke(gameState);
     public static void OnClearScreen() => ClearScreen?.Invoke();
     public static void OnWeaponChanged(WeaponType weapon) => WeaponChanged?.Invoke(weapon);
     public static void OnHealthPickup() => HealthPickup?.Invoke();

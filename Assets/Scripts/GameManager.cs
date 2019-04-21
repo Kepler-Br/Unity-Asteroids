@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
+public enum GameState { StartState = 0, PlayingState, GameOverState };
 
 public class GameManager : MonoBehaviour
 {
-
-    public enum GameState { StartState = 0, PlayingState, GameOverState };
     public GameState gameState;
     public int firstSpawnCount = 10;
-    public float spawnNewAsteroidEvery = 1.0f;
+    public float spawnNewAsteroidEvery = 0.1f;
     public GameObject asteroidPrefab;
+    public GameObject powerupPickupSound;
 
     private float spawnNewAsteroidTimer;
     private float screenHeight;
@@ -26,7 +28,15 @@ public class GameManager : MonoBehaviour
         GameEvents.PlayerRespawn += OnPlayerRespawn;
         GameEvents.GameRestart += OnGameRestart;
         GameEvents.ClearScreen += ClearScreen;
+        GameEvents.PowerupPickup += OnPowerupPickup;
     }
+
+    void OnPowerupPickup()
+    {
+        var sound = Instantiate(powerupPickupSound);
+        Destroy(sound, 3);
+    }
+
 
     void OnPlayerDeath()
     {
@@ -52,7 +62,7 @@ public class GameManager : MonoBehaviour
     void OnGameOver()
     {
         spawnNewAsteroidTimer = spawnNewAsteroidEvery;
-        gameState = GameState.GameOverState;
+        ChangeGameState(GameState.GameOverState);
     }
 
     void OnGameRestart()
@@ -80,7 +90,7 @@ public class GameManager : MonoBehaviour
 
     void CreateAsteroid()
     {
-        float degree = Random.Range(0.0f, Mathf.PI * 2.0f);
+        float degree = UnityEngine.Random.Range(0.0f, Mathf.PI * 2.0f);
         float radius = 80.0f;
         Vector3 spawnPoint = new Vector3();
         spawnPoint.x = radius * Mathf.Cos(degree);
@@ -90,7 +100,7 @@ public class GameManager : MonoBehaviour
         AsteroidScript asteroidScript = asteroid.GetComponent<AsteroidScript>();
         const float maxRadius = 5.0f;
         const float minRadius = 2.0f;
-        float asteroidRadius = Random.Range(minRadius, maxRadius);
+        float asteroidRadius = UnityEngine.Random.Range(minRadius, maxRadius);
         asteroidScript.Initialize(asteroidRadius);
     }
 
@@ -108,8 +118,28 @@ public class GameManager : MonoBehaviour
             if (spawnNewAsteroidTimer < 0.0f)
             {
                 CreateAsteroid();
-                spawnNewAsteroidTimer = 3.0f;
+                spawnNewAsteroidTimer = spawnNewAsteroidEvery;
             }
+        }
+        ProcessInput();
+    }
+
+    void ChangeGameState(GameState gameState)
+    {
+        GameEvents.OnGameStateChanged(gameState);
+        this.gameState = gameState;
+    }
+
+    void ProcessInput()
+    {
+        if (gameState == GameState.StartState && Input.GetKey(KeyCode.Return))
+        {
+            ChangeGameState(GameState.PlayingState);
+        }
+        if (gameState == GameState.GameOverState && Input.GetKey(KeyCode.Return))
+        {
+            ChangeGameState(GameState.PlayingState);
+            GameEvents.OnGameRestart();
         }
     }
 }

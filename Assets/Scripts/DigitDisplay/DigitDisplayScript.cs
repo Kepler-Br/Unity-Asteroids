@@ -7,7 +7,7 @@ public class DigitDisplayScript : MonoBehaviour
 {
     [SerializeField]
     private int score = 0;
-    private const uint digitCount = 5;
+    private const uint digitCount = 6;
     private Text textMesh;
 
     void Start()

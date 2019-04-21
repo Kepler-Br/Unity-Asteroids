@@ -25,7 +25,8 @@ public class PlayerLivesDisplayScript : MonoBehaviour
 
     void OnGameRestart()
     {
-        SetHealth(3);
+        lives = 3;
+        SetHealth(lives);
     }
 
     void OnPlayerDeath()

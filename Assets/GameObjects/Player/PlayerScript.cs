@@ -14,6 +14,7 @@ public class PlayerScript : MonoBehaviour
     public GameObject weaponFirePlace;
     public int lives = 3;
 
+    [SerializeField] AudioSource deathSound;
     WeaponFirePlace weaponFirePlaceScript;
     GameManager gameManager;
     Rigidbody2D playerRigidBody;
@@ -21,19 +22,40 @@ public class PlayerScript : MonoBehaviour
     Material material;
 
     int materialColorID;
-    bool destroyed = false;
+    bool destroyed = true;
 
     void Start()
     {
         meshRenderer = this.GetComponent<MeshRenderer>();
         weaponFirePlaceScript = weaponFirePlace.GetComponent<WeaponFirePlace>();
-        
+
         gameManager = GameObject.FindObjectOfType<GameManager>();
         playerRigidBody = this.GetComponent<Rigidbody2D>();
         material = GetComponent<Renderer>().material;
+        GameEvents.GameStateChanged += OnGameStateChanged;
 
-        
+
         materialColorID = Shader.PropertyToID("_MainColor");
+    }
+
+    void OnGameStateChanged(GameState gameState)
+    {
+        if (gameState == GameState.GameOverState)
+        {
+            meshRenderer.enabled = false;
+            destroyed = true;
+        }
+        if (gameState == GameState.PlayingState)
+        {
+            meshRenderer.enabled = true;
+            lives = 3;
+            destroyed = false;
+        }
+        if (gameState == GameState.StartState)
+        {
+            meshRenderer.enabled = false;
+            destroyed = true;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -43,7 +65,11 @@ public class PlayerScript : MonoBehaviour
             lives--;
             LiveLost();
             if (lives == 0)
+            {
+                meshRenderer.enabled = true;
                 GameEvents.OnGameOver();
+            }
+            deathSound.Play();
         }
     }
 
@@ -83,9 +109,9 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-       
+
         UpdatePlayerColor();
-        
+
     }
 
     void UpdatePlayerColor()
@@ -111,13 +137,8 @@ public class PlayerScript : MonoBehaviour
 
     void ProcessInput()
     {
-        if (lives == 0 && Input.GetKey(KeyCode.Return))
-        {
-            Replay();
-        }
         if (destroyed)
             return;
-
         float verticalMovement = Input.GetAxis("Vertical-keyboard");
         if (verticalMovement > 0.0f)
             rocketExhaust.SetActive(true);

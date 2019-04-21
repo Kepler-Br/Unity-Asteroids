@@ -8,6 +8,7 @@ using UnityEngine;
 public class AsteroidScript : MonoBehaviour
 {
     private float radius;
+    [SerializeField] GameObject soundPrefabOnDestroy;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject asteroidPrefab;
     [SerializeField] private GameObject destroyedParticles;
@@ -36,7 +37,7 @@ public class AsteroidScript : MonoBehaviour
         float step = (2 * Mathf.PI) / (points_number);
         for (int i = 0; i < points_number; i++)
         {
-            float minRadius = this.radius - this.radius / 4.0f;
+            float minRadius = this.radius - this.radius / 2.0f;
             float radius = Random.Range(minRadius, this.radius);
             Vector3 vertex = new Vector3(0.0f, 0.0f, 0.0f);
             vertex.x = radius * Mathf.Cos(degree);
@@ -131,6 +132,8 @@ public class AsteroidScript : MonoBehaviour
 
     void OnDeath()
     {
+        GameObject sound = Instantiate(soundPrefabOnDestroy);
+        Destroy(sound, 3);
         int score = (int)HitPointsFromRadius(this.radius)/10;
         GameEvents.OnAsteroidDestroyed(score);
         var newParticle = Instantiate(destroyedParticles, this.gameObject.transform.position, Quaternion.identity);

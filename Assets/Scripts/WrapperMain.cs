@@ -39,6 +39,8 @@ public class WrapperMain : MonoBehaviour
             var coms = ghosts[i].GetComponents<MonoBehaviour>();
             foreach (var com in coms)
                 Destroy(com);
+            var wrapperChild = ghosts[i].AddComponent<WrapperChild>();
+            wrapperChild.parent = this.gameObject;
         }
     }
 

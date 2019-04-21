@@ -16,7 +16,7 @@ public class PowerUpSpawnerScript : MonoBehaviour
         spawnPowerUpTimer = spawnPowerUpTime;
         powerUps = new GameObject[] { UnityEngine.Resources.Load("Powerups/RandomWeapon") as GameObject,
                                       UnityEngine.Resources.Load("Powerups/RocketWeapon") as GameObject,
-                                    //   UnityEngine.Resources.Load("Powerups/SquareWeapon") as GameObject,
+                                      UnityEngine.Resources.Load("Powerups/StingerWeapon") as GameObject,
                                       UnityEngine.Resources.Load("Powerups/RapidWeapon") as GameObject,
                                       UnityEngine.Resources.Load("Powerups/ChaingunWeapon") as GameObject,
                                       UnityEngine.Resources.Load("Powerups/ClearScreenPowerUp") as GameObject,

@@ -16,7 +16,8 @@ public class ClearScreenPowerUp : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            gameManager.SendMessage("ClearPlayField");
+            
+            GameEvents.OnClearScreen();
             Destroy(this.gameObject);
         }
     }

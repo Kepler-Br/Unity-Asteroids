@@ -20,7 +20,7 @@ public class PowerUpSpawnerScript : MonoBehaviour
                                       UnityEngine.Resources.Load("Powerups/RapidWeapon") as GameObject,
                                       UnityEngine.Resources.Load("Powerups/ChaingunWeapon") as GameObject,
                                       UnityEngine.Resources.Load("Powerups/ClearScreenPowerUp") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/ShotgunPowerUp") as GameObject, };
+                                      UnityEngine.Resources.Load("Powerups/ShotgunWeapon") as GameObject, };
         GameEvents.GameOver += StopSpawn;
         GameEvents.PlayerDeath += StopSpawn;
         GameEvents.PlayerRespawn += StartSpawn;

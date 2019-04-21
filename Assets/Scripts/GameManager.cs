@@ -25,13 +25,19 @@ public class GameManager : MonoBehaviour
         GameEvents.PlayerDeath += OnPlayerDeath;
         GameEvents.PlayerRespawn += OnPlayerRespawn;
         GameEvents.GameRestart += OnGameRestart;
+        GameEvents.ClearScreen += ClearScreen;
     }
 
     void OnPlayerDeath()
     {
         spawnNewAsteroidTimer = spawnNewAsteroidEvery;
         spawningAsteroids = false;
+        ClearScreen();
 
+    }
+
+    void ClearScreen()
+    {
         GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
         for (int i = 0; i < asteroids.Length; i++)
             Destroy(asteroids[i]);

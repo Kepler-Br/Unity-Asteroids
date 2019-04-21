@@ -9,7 +9,7 @@ using UnityEngine;
 public class LineCreator : MonoBehaviour
 {
     // Private vars.
-    private bool loop = false;
+    // private bool loop = false;
     private bool smoothMesh = false;
     const int minimumPoints = 2;
 

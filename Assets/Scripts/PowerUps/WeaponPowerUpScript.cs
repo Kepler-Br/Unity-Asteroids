@@ -38,7 +38,7 @@ public class WeaponPowerUpScript : MonoBehaviour
             }
             else
                 selectedWeapon = weapon;
-            col.gameObject.SendMessage("SetWeapon", selectedWeapon);
+            GameEvents.OnWeaponChanged(selectedWeapon);
             Destroy(this.gameObject);
         }
     }

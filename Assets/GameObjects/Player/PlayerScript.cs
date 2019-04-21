@@ -5,68 +5,35 @@ using System;
 
 public class PlayerScript : MonoBehaviour
 {
+    public Action Fire;
+
     public float thrustForce = 80.0f;
     public float rotationSpeed = 3.0f;
-    public float weaponTimeout = 15.0f;
     public GameObject destroyedShipPrefab;
     public GameObject rocketExhaust;
+    public GameObject weaponFirePlace;
     public int lives = 3;
 
-    private GameManager gameManager;
-    private Rigidbody2D playerRigidBody;
-    private PlayerWeapon currentWeapon;
+    WeaponFirePlace weaponFirePlaceScript;
+    GameManager gameManager;
+    Rigidbody2D playerRigidBody;
     MeshRenderer meshRenderer;
-    private Material material;
-    private float weaponTimeoutTimer = 0.0f;
-    private bool isCustomWeapon = false;
-    private int materialColorID;
-    private bool destroyed = false;
+    Material material;
+
+    int materialColorID;
+    bool destroyed = false;
 
     void Start()
     {
         meshRenderer = this.GetComponent<MeshRenderer>();
-        currentWeapon = new ChaingunWeapon(this.gameObject);
+        weaponFirePlaceScript = weaponFirePlace.GetComponent<WeaponFirePlace>();
+        
         gameManager = GameObject.FindObjectOfType<GameManager>();
         playerRigidBody = this.GetComponent<Rigidbody2D>();
         material = GetComponent<Renderer>().material;
 
-        weaponTimeoutTimer = weaponTimeout;
+        
         materialColorID = Shader.PropertyToID("_MainColor");
-    }
-
-    void SetWeapon(WeaponType weapon)
-    {
-        switch (weapon)
-        {
-            case WeaponType.Chaingun:
-                currentWeapon = new ChaingunWeapon(this.gameObject);
-                isCustomWeapon = true;
-                weaponTimeoutTimer = weaponTimeout;
-                break;
-            case WeaponType.RapidFire:
-                currentWeapon = new RapidFireWeapon(this.gameObject);
-                isCustomWeapon = true;
-                weaponTimeoutTimer = weaponTimeout;
-                break;
-            case WeaponType.Rockets:
-                currentWeapon = new RocketWeapon(this.gameObject);
-                isCustomWeapon = true;
-                weaponTimeoutTimer = weaponTimeout;
-                break;
-            case WeaponType.SquareWeapon:
-                currentWeapon = new SquareWeapon(this.gameObject);
-                break;
-            case WeaponType.Stinger:
-                currentWeapon = new StingerWeapon(this.gameObject);
-                isCustomWeapon = true;
-                weaponTimeoutTimer = weaponTimeout;
-                break;
-            case WeaponType.Shotgun:
-                currentWeapon = new ShotgunWeapon(this.gameObject);
-                isCustomWeapon = true;
-                weaponTimeoutTimer = weaponTimeout;
-                break;
-        }
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -116,29 +83,21 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        if (isCustomWeapon)
-        {
-            weaponTimeoutTimer -= Time.deltaTime;
-            if (weaponTimeoutTimer < 0.0f)
-            {
-                SetWeapon(WeaponType.SquareWeapon);
-                isCustomWeapon = false;
-            }
-        }
+       
         UpdatePlayerColor();
-        currentWeapon.Update();
+        
     }
 
     void UpdatePlayerColor()
     {
         Color resultColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        if (isCustomWeapon)
+        if (weaponFirePlaceScript.IsCustomWeapon())
         {
-            float greenBlueColors = 1.0f - weaponTimeoutTimer / weaponTimeout;
+            float greenBlueColors = 1.0f - weaponFirePlaceScript.GetNormalizedWeaponTimeOut();
             resultColor *= new Color(1.0f, greenBlueColors, greenBlueColors, 1.0f);
         }
         const float effectStrength = 0.6f;
-        resultColor *= 1.0f - this.currentWeapon.GetNormalizedReloadTime() * effectStrength;
+        resultColor *= 1.0f - weaponFirePlaceScript.GetNormalizedReloadTime() * effectStrength;
 
         // material.SetColor(materialColorID, new Color(1.0f - weaponTimeoutTimer / weaponTimeout, 1.0f, 1.0f));
         // material.SetColor(materialColorID, new Color(1.0f - this.currentWeapon.GetNormalizedReloadTime() / 2.0f, 1.0f - this.currentWeapon.GetNormalizedReloadTime() / 2.0f, 1.0f - this.currentWeapon.GetNormalizedReloadTime() / 2.0f, 1.0f));
@@ -167,9 +126,9 @@ public class PlayerScript : MonoBehaviour
 
         playerRigidBody.AddForce(this.transform.up * this.thrustForce * verticalMovement);
 
-        float fire = Input.GetAxis("Fire");
-        if (fire > 0.0f)
-            currentWeapon.Fire();
+        float fireButton = Input.GetAxis("Fire");
+        if (fireButton > 0.0f)
+            this.Fire?.Invoke();
 
         float rotation = Input.GetAxis("Horizontal-keyboard");
         transform.Rotate(0.0f, 0.0f, -rotationSpeed * rotation);

@@ -21,9 +21,11 @@ public abstract class PlayerWeapon
     public float bulletLifeTime = 2.0f;
     public float bulletForce = 1500.0f;
 
+    public Transform firePlacePosition;
     public Transform playerPosition;
     public Rigidbody2D playerRigidBody;
     public GameObject bulletPrefab;
+
 
     public float reloadTimer = 0.0f;
 
@@ -35,8 +37,9 @@ public abstract class PlayerWeapon
             reloadTimer -= Time.deltaTime;
     }
 
-    public PlayerWeapon(GameObject player, string bulletName)
+    public PlayerWeapon(GameObject player, GameObject firePlace, string bulletName)
     {
+        this.firePlacePosition = firePlace.transform;
         this.fireParticle = UnityEngine.Resources.Load("FireParticles") as GameObject;
         this.playerPosition = player.transform;
         this.playerRigidBody = player.GetComponent<Rigidbody2D>();
@@ -64,7 +67,7 @@ public abstract class PlayerWeapon
 
 public class ShotgunWeapon : PlayerWeapon
 {
-    public ShotgunWeapon(GameObject player) : base(player, "SquareBullet")
+    public ShotgunWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "SquareBullet")
     {
         reloadTime = 1.0f;
         bulletLifeTime = 2.0f;
@@ -76,15 +79,12 @@ public class ShotgunWeapon : PlayerWeapon
     {
         if (reloadTimer < 0.0f)
         {
-            Vector3 particlePosition = playerPosition.position + playerPosition.up;
-            SpawnParticle(particlePosition);
+            SpawnParticle(firePlacePosition.position);
             reloadTimer = reloadTime;
             const int bulletCount = 10;
             for (int i = 1; i < bulletCount; i++)
             {
-                Vector3 bulletPosition = playerPosition.position + playerPosition.up;
-
-                GameObject bullet = GameObject.Instantiate(bulletPrefab, bulletPosition, playerPosition.rotation);
+                GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
                 GameObject.Destroy(bullet, bulletLifeTime);
                 Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
                 bulletRigidBody.AddForce(GetBulletForce());
@@ -132,7 +132,7 @@ public class ShotgunWeapon : PlayerWeapon
 
 public class RapidFireWeapon : PlayerWeapon
 {
-    public RapidFireWeapon(GameObject player) : base(player, "RapidFireBullet")
+    public RapidFireWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "RapidFireBullet")
     {
         reloadTime = 0.04f;
         bulletLifeTime = 2.0f;
@@ -144,9 +144,8 @@ public class RapidFireWeapon : PlayerWeapon
         if (reloadTimer < 0.0f)
         {
             reloadTimer = reloadTime;
-            Vector3 bulletPosition = playerPosition.position + playerPosition.up * 1.0f;
             // SpawnParticle(bulletPosition);
-            GameObject bullet = GameObject.Instantiate(bulletPrefab, bulletPosition, playerPosition.rotation);
+            GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
             bulletRigidBody.AddForce(playerPosition.up + (Vector3)playerRigidBody.velocity * 4.0f + GetRandomBulletDirection());
@@ -176,7 +175,7 @@ public class ChaingunWeapon : PlayerWeapon
     //Otherwise - right.
     private bool isFiringFromLeftMuzzle = true;
 
-    public ChaingunWeapon(GameObject player) : base(player, "SquareBullet")
+    public ChaingunWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "SquareBullet")
     {
         reloadTime = 0.1f;
         bulletLifeTime = 4.5f;
@@ -192,7 +191,7 @@ public class ChaingunWeapon : PlayerWeapon
             if (isFiringFromLeftMuzzle)
                 muzzlePlace = -muzzlePlace;
             isFiringFromLeftMuzzle = !isFiringFromLeftMuzzle;
-            Vector3 bulletPosition = playerPosition.position + playerPosition.up * 1 + muzzlePlace;
+            Vector3 bulletPosition = firePlacePosition.position + muzzlePlace;
             SpawnParticle(bulletPosition);
             GameObject bullet = GameObject.Instantiate(bulletPrefab, bulletPosition, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
@@ -205,7 +204,7 @@ public class ChaingunWeapon : PlayerWeapon
 
 public class SquareWeapon : PlayerWeapon
 {
-    public SquareWeapon(GameObject player) : base(player, "SquareBullet")
+    public SquareWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "SquareBullet")
     {
         reloadTime = 0.3f;
         bulletLifeTime = 5.0f;
@@ -217,9 +216,8 @@ public class SquareWeapon : PlayerWeapon
         if (reloadTimer < 0.0f)
         {
             reloadTimer = reloadTime;
-            Vector3 bulletPosition = playerPosition.position + playerPosition.up * 1;
-            SpawnParticle(bulletPosition);
-            GameObject bullet = GameObject.Instantiate(bulletPrefab, bulletPosition, playerPosition.rotation);
+            SpawnParticle(firePlacePosition.position);
+            GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
             bulletRigidBody.AddForce(playerPosition.up * bulletForce);
@@ -231,7 +229,9 @@ public class SquareWeapon : PlayerWeapon
 public class RocketWeapon : PlayerWeapon
 {
 
-    public RocketWeapon(GameObject player) : base(player, "RocketBullet")
+    private bool isFiringFromLeftMuzzle = true;
+
+    public RocketWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "RocketBullet")
     {
         reloadTime = 1.3f;
         bulletLifeTime = 5.0f;
@@ -242,10 +242,15 @@ public class RocketWeapon : PlayerWeapon
     {
         if (reloadTimer < 0.0f)
         {
+            Vector3 muzzlePlace = playerPosition.right / 2.0f;
+            if (isFiringFromLeftMuzzle)
+                muzzlePlace = -muzzlePlace;
+            isFiringFromLeftMuzzle = !isFiringFromLeftMuzzle;
             reloadTimer = reloadTime;
-            Vector3 bulletPosition = playerPosition.position + playerPosition.up * 1;
-            SpawnParticle(bulletPosition);
-            GameObject bullet = GameObject.Instantiate(bulletPrefab, bulletPosition, playerPosition.rotation);
+
+            Vector3 firePosition = playerPosition.position + muzzlePlace - playerPosition.up;
+            SpawnParticle(firePosition);
+            GameObject bullet = GameObject.Instantiate(bulletPrefab, firePosition, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
             bulletRigidBody.AddForce(playerPosition.up * bulletForce);
@@ -256,7 +261,7 @@ public class RocketWeapon : PlayerWeapon
 
 public class StingerWeapon : PlayerWeapon
 {
-    public StingerWeapon(GameObject player) : base(player, "StingerBullet")
+    public StingerWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "StingerBullet")
     {
         reloadTime = 1.0f;
         bulletLifeTime = 2.0f;
@@ -268,9 +273,8 @@ public class StingerWeapon : PlayerWeapon
         if (reloadTimer < 0.0f)
         {
             reloadTimer = reloadTime;
-             Vector3 bulletPosition = playerPosition.position + playerPosition.up * 1;
-            SpawnParticle(bulletPosition);
-            GameObject bullet = GameObject.Instantiate(bulletPrefab, bulletPosition, playerPosition.rotation);
+            SpawnParticle(firePlacePosition.position);
+            GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
             bulletRigidBody.AddForce(playerPosition.up * bulletForce + (Vector3)playerRigidBody.velocity * 4.0f);

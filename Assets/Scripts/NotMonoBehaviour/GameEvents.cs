@@ -6,14 +6,17 @@ using System;
 public class GameEvents
 {
 
+    public static Action<WeaponType> WeaponChanged;
+    public static Action ClearScreen;
     public static Action GameOver;
     public static Action PlayerDeath;
     public static Action PlayerRespawn;
     public static Action GameRestart;
     public static Action HealthPickup;
     public static Action<int> AsteroidDestroyed;
-    
 
+    public static void OnClearScreen() => ClearScreen?.Invoke();
+    public static void OnWeaponChanged(WeaponType weapon) => WeaponChanged?.Invoke(weapon);
     public static void OnHealthPickup() => HealthPickup?.Invoke();
     public static void OnGameOver() => GameOver?.Invoke();
     public static void OnPlayerDeath() => PlayerDeath?.Invoke();

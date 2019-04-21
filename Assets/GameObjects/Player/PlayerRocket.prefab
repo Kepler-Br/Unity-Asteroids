@@ -109,6 +109,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 251e7cb4b51b0308cb24ca2fc7e38c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animationSpeed: 0.05
+  animationTimer: 0
+--- !u!1 &2648843007300671481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5026169883733592271}
+  - component: {fileID: 1601668973613452688}
+  m_Layer: 0
+  m_Name: WeaponFire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5026169883733592271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2648843007300671481}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.14, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8410094216231018579}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1601668973613452688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2648843007300671481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42ba7600c2e30c8f1baff24b82369766, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 8410094216231018591}
+  weaponTimeout: 15
 --- !u!1 &8410094216231018591
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,6 +191,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6872610706803163812}
+  - {fileID: 5026169883733592271}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -159,7 +207,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 5
+  m_Mass: 10
   m_LinearDrag: 1.5
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -208,11 +256,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11d58d8716fa9689cb5eb9feb6576275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thrustForce: 100
+  thrustForce: 300
   rotationSpeed: 6
-  weaponTimeout: 15
-  destroyedShipPrefab: {fileID: 0}
-  rocketExhaust: {fileID: 0}
+  destroyedShipPrefab: {fileID: 8904011473623893976, guid: f1b76cc27d0a4408fbcfaeeda5226505,
+    type: 3}
+  rocketExhaust: {fileID: 589923972297784745}
+  weaponFirePlace: {fileID: 2648843007300671481}
   lives: 3
 --- !u!114 &8410094216231018577
 MonoBehaviour:

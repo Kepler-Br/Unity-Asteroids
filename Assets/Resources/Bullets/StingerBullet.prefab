@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8274654368083044350}
   - component: {fileID: 8274654368083044345}
   - component: {fileID: 1847448570904944877}
+  - component: {fileID: 3634567013525680723}
   m_Layer: 0
   m_Name: StingerBullet
   m_TagString: Bullet
@@ -104,7 +105,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 4.44, y: 1}
   m_EdgeRadius: 0
 --- !u!50 &8274654368083044345
 Rigidbody2D:
@@ -141,3 +142,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 80
   destroyOnAsteroidContact: 0
+--- !u!114 &3634567013525680723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8274654368083044344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594be32a52cf1488b906be9accad7d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

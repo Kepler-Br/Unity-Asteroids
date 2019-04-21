@@ -17,12 +17,18 @@ public class WeaponFirePlace : MonoBehaviour
 
     void Awake()
     {
-        currentWeapon = new RapidFireWeapon(this.player, this.gameObject);
+        currentWeapon = new SquareWeapon(this.player, this.gameObject);
         weaponTimeoutTimer = weaponTimeout;
 
         this.playerScript = player.GetComponent<PlayerScript>();
         this.playerScript.Fire += OnFire;
         GameEvents.WeaponChanged += OnWeaponChange;
+        GameEvents.PlayerDeath += OnPlayerDeath;
+    }
+
+    public void OnPlayerDeath()
+    {
+        SetWeapon(WeaponType.SquareWeapon);
     }
 
     public bool IsCustomWeapon()
@@ -71,6 +77,8 @@ public class WeaponFirePlace : MonoBehaviour
                 break;
             case WeaponType.SquareWeapon:
                 currentWeapon = new SquareWeapon(this.player, this.gameObject);
+                isCustomWeapon = false;
+                weaponTimeoutTimer = weaponTimeout;
                 break;
             case WeaponType.Stinger:
                 currentWeapon = new StingerWeapon(this.player, this.gameObject);

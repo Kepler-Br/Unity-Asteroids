@@ -153,7 +153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5758cd5b772b1cc5bb2ec61b5fee73a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 30
+  destroyOnAsteroidContact: 1
 --- !u!114 &1319683231305111160
 MonoBehaviour:
   m_ObjectHideFlags: 0

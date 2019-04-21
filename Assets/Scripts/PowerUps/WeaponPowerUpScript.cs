@@ -29,6 +29,7 @@ public class WeaponPowerUpScript : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
+            GameEvents.OnPowerupPickup();
             WeaponType selectedWeapon;
             if (isRandom)
             {

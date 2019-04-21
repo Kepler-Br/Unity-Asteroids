@@ -17,7 +17,7 @@ public class WeaponFirePlace : MonoBehaviour
 
     void Awake()
     {
-        currentWeapon = new SquareWeapon(this.player, this.gameObject);
+        currentWeapon = new RapidFireWeapon(this.player, this.gameObject);
         weaponTimeoutTimer = weaponTimeout;
 
         this.playerScript = player.GetComponent<PlayerScript>();
@@ -37,7 +37,7 @@ public class WeaponFirePlace : MonoBehaviour
 
     public float GetNormalizedWeaponTimeOut()
     {
-        return this.weaponTimeoutTimer/this.weaponTimeout;
+        return this.weaponTimeoutTimer / this.weaponTimeout;
     }
 
     void OnFire()
@@ -79,6 +79,11 @@ public class WeaponFirePlace : MonoBehaviour
                 break;
             case WeaponType.Shotgun:
                 currentWeapon = new ShotgunWeapon(this.player, this.gameObject);
+                isCustomWeapon = true;
+                weaponTimeoutTimer = weaponTimeout;
+                break;
+            case WeaponType.Lazer:
+                currentWeapon = new LazerWeapon(this.player, this.gameObject);
                 isCustomWeapon = true;
                 weaponTimeoutTimer = weaponTimeout;
                 break;

@@ -8,9 +8,9 @@ public class PlayerController : MonoBehaviour
     public Action Fire;
 
     [SerializeField]
-    Rigidbody2D playerRigidBody;
+    Rigidbody2D playerRigidBody = null;
     [SerializeField]
-    GameObject rocketExhaust;
+    GameObject rocketExhaust = null;
 
     [SerializeField]
     float thrustForce = 300.0f;

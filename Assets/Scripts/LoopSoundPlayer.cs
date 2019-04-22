@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class LoopSoundPlayer : MonoBehaviour
 {
-    [SerializeField] AudioSource beginning;
-    [SerializeField] AudioSource middle;
+    [SerializeField] AudioSource beginning = null;
+    [SerializeField] AudioSource middle = null;
     bool isMuting = false;
     bool isVolumeUp = false;
     [SerializeField] bool isPlaying = false;

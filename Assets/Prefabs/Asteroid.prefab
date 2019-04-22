@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 597640035721534732}
   - component: {fileID: 4232738204430069291}
   - component: {fileID: 3663640444811811454}
+  - component: {fileID: 7874184034035210100}
   m_Layer: 0
   m_Name: Asteroid
   m_TagString: Asteroid
@@ -51,12 +52,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundPrefabOnDestroy: {fileID: 2942076039422997132, guid: 56b132324531926148dae9be5e92bf5d,
     type: 3}
-  gameManager: {fileID: 0}
   asteroidPrefab: {fileID: 2929092247371747026}
   destroyedParticles: {fileID: 5494240909023990013, guid: e57041bdaf6e70febbb9837a1fca5c9d,
     type: 3}
+  damageReceiver: {fileID: 7874184034035210100}
   isCrushableToSmallerAsteroids: 0
-  hitpoints: 0
 --- !u!114 &4836855554032178720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,3 +183,16 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2929092247371747026}
   m_Mesh: {fileID: 0}
+--- !u!114 &7874184034035210100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2929092247371747026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68c4021048414b87e97056b56226cb0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0

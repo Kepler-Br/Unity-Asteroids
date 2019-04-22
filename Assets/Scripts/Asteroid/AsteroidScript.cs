@@ -2,46 +2,52 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(DamageReceiver))]
 [RequireComponent(typeof(LineCreator))]
 [RequireComponent(typeof(PolygonCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class AsteroidScript : MonoBehaviour
 {
-    float radius;
-    float hitpoints;
+    float radius = 0.0f;
 
     [SerializeField]
-    GameObject soundPrefabOnDestroy;
+    GameObject soundPrefabOnDestroy = null;
     [SerializeField]
-    GameObject asteroidPrefab;
+    GameObject asteroidPrefab = null;
     [SerializeField]
-    GameObject destroyedParticles;
+    GameObject destroyedParticles = null;
     [SerializeField]
-    bool isCrushableToSmallerAsteroids;
-    
+    DamageReceiver damageReceiver = null;
+    [SerializeField]
+    bool isCrushableToSmallerAsteroids = true;
+    int score = 0;
 
-    void Awake()
+
+    void Start()
     {
         GameEvents.OnAsteroidCreated();
-        GameEvents.PlayerDeath += OnPlayerDeath;
+        damageReceiver.HealthZero += OnHealthZero;
+        // GameEvents.PlayerDeath += OnPlayerDeath;
+    }
+
+    void OnHealthZero()
+    {
+        OnDeath();
+        Destroy(this.gameObject);
     }
 
     void OnDestroy()
     {
-        GameEvents.PlayerDeath -= OnPlayerDeath;
-        OnDeath();
+
+        // GameEvents.PlayerDeath -= OnPlayerDeath;
     }
 
     void OnPlayerDeath()
     {
-        float timeToDie = Random.Range(0.1f, 3.0f);
-        Destroy(this.gameObject, timeToDie);
+        // float timeToDie = Random.Range(0.1f, 3.0f);
+        // Destroy(this.gameObject, timeToDie);
     }
 
-    void Damage(float hitpoints)
-    {
-        this.hitpoints -= hitpoints;
-    }
 
     Vector3[] GenerateAsteroidVerticles()
     {
@@ -109,14 +115,14 @@ public class AsteroidScript : MonoBehaviour
     static private float HitPointsFromRadius(float radius)
     {
         const float multiplyFactor = 65.0f;
-        return radius*multiplyFactor;
+        return radius * multiplyFactor;
     }
 
     public void Initialize(float radius)
     {
         this.radius = radius;
         this.isCrushableToSmallerAsteroids = AsteroidScript.IsCrushableFromRadius(radius);
-        this.hitpoints = AsteroidScript.HitPointsFromRadius(radius);
+        damageReceiver.health = AsteroidScript.HitPointsFromRadius(radius);
 
         Vector3[] asteroidVertices = GenerateAsteroidVerticles();
         SetupLineRenderer(asteroidVertices);
@@ -131,29 +137,19 @@ public class AsteroidScript : MonoBehaviour
         asteroidScript.Initialize(this.radius / radiusDivider);
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (this.hitpoints < 0.0f)
-        {
-            if (this.isCrushableToSmallerAsteroids)
-            {
-                const int maxSmallerAsteroids = 4;
-                int asteroidNum = Random.Range(2, maxSmallerAsteroids);
-                for (int i = 0; i < asteroidNum; i++)
-                    CreateSmallerAsteroid(asteroidNum);
-            }
-            OnDeath();
-            Destroy(this.gameObject);
-        }
-    }
-
     void OnDeath()
     {
+        if (this.isCrushableToSmallerAsteroids)
+        {
+            const int maxSmallerAsteroids = 4;
+            int asteroidNum = Random.Range(2, maxSmallerAsteroids);
+            for (int i = 0; i < asteroidNum; i++)
+                CreateSmallerAsteroid(asteroidNum);
+        }
+        GameEvents.OnAsteroidDestroyed(score);
         GameObject sound = Instantiate(soundPrefabOnDestroy);
         Destroy(sound, 3);
-        int score = (int)HitPointsFromRadius(this.radius)/10;
-        GameEvents.OnAsteroidDestroyed(score);
+        score = (int)HitPointsFromRadius(this.radius) / 10;
         var newParticle = Instantiate(destroyedParticles, this.gameObject.transform.position, Quaternion.identity);
         Destroy(newParticle, 5);
     }

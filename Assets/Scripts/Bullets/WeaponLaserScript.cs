@@ -15,15 +15,18 @@ public class WeaponLaserScript : MonoBehaviour
     public float damage = .01f;
 
     LazerStages currentStage = LazerStages.heatUp;
-    int materialColorID;
-    LineCreator lineCreator;
-    Material material;
+    int materialColorID = 0;
+    LineCreator lineCreator = null;
+    Material material = null;
 
     float lazerTimer = 0.0f;
 
     const float heatUpTimer = 0.8f;
     const float damageTimer = 1.0f;
     const float cooldownTimer = 1.5f;
+
+    [SerializeField]
+    GameObject sound = null;
 
 
     void Awake()
@@ -32,7 +35,13 @@ public class WeaponLaserScript : MonoBehaviour
         lineCreator = GetComponent<LineCreator>();
         material = GetComponent<Renderer>().material;
         materialColorID = Shader.PropertyToID("_MainColor");
+        PlaySound();
+    }
 
+    void PlaySound()
+    {
+        var soundGameObject = Instantiate(sound);
+        Destroy(soundGameObject, 2.0f);
     }
 
     void NextStage()
@@ -60,7 +69,8 @@ public class WeaponLaserScript : MonoBehaviour
         {
             if (rc2d.collider.gameObject.tag == "Asteroid" && currentStage == LazerStages.damage)
             {
-                rc2d.collider.gameObject.SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
+                var damageReciever = rc2d.collider.gameObject.GetComponent<DamageReceiver>();
+                damageReciever?.Damage(damage);
             }
         }
 

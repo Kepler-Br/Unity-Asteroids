@@ -9,12 +9,10 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]
     GameState gameState;
-    bool isDestroyingAsteroids = false;
+    // bool isDestroyingAsteroids = false;
 
     void Awake()
     {
-        // spawnNewAsteroidTimer = spawnNewAsteroidEvery;
-
         GameEvents.GameOver += OnGameOver;
         GameEvents.PlayerDeath += OnPlayerDeath;
         GameEvents.GameRestart += OnGameRestart;
@@ -39,9 +37,9 @@ public class GameManager : MonoBehaviour
 
     void ClearScreen()
     {
-        // GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
-        // for (int i = 0; i < asteroids.Length; i++)
-            // Destroy(asteroids[i]);
+        GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
+        for (int i = 0; i < asteroids.Length; i++)
+            Destroy(asteroids[i]);
         GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
         for (int i = 0; i < bullets.Length; i++)
             Destroy(bullets[i]);

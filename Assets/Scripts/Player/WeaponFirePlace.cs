@@ -7,14 +7,14 @@ public class WeaponFirePlace : MonoBehaviour
     // [SerializeField]
     // GameObject playerControllet;
     [SerializeField]
-    GameObject player;
-    PlayerController controllerScript;
+    GameObject player = null;
+    PlayerController controllerScript = null;
 
     [SerializeField]
     public float weaponTimeout = 15.0f;
     private float weaponTimeoutTimer = 0.0f;
     private bool isCustomWeapon = false;
-    private PlayerWeapon currentWeapon;
+    private PlayerWeapon currentWeapon = null;
 
 
     void Awake()

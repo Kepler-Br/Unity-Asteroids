@@ -34,12 +34,13 @@ public class WrapperMain : MonoBehaviour
         for (int i = 0; i < 8; i++)
         {
             ghosts[i] = Instantiate(gameObject, this.transform.position, Quaternion.identity);
-
             DestroyImmediate(ghosts[i].GetComponent<WrapperMain>());
             var coms = ghosts[i].GetComponents<MonoBehaviour>();
             foreach (var com in coms)
                 Destroy(com);
+            ghosts[i].AddComponent<DamageReceiver>();
             var wrapperChild = ghosts[i].AddComponent<WrapperChild>();
+
             wrapperChild.parent = this.gameObject;
         }
     }

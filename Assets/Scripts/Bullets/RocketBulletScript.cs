@@ -5,6 +5,19 @@ using UnityEngine;
 public class RocketBulletScript : MonoBehaviour
 {
     public float damage = 100.0f;
+    [SerializeField]
+    GameObject sound;
+
+    void Awake()
+    {
+        PlaySound();
+    }
+
+    void PlaySound()
+    {
+        var soundGameObject = Instantiate(sound);
+        Destroy(soundGameObject, 2.0f);
+    }
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -14,7 +27,8 @@ public class RocketBulletScript : MonoBehaviour
 
     void OnDeath(GameObject asteroid)
     {
-        asteroid.SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
+        var damageReciever = asteroid.GetComponent<DamageReceiver>();
+        damageReciever?.Damage(damage);
 
         SpawnSplinters(18);
         Destroy(this.gameObject);
@@ -32,7 +46,7 @@ public class RocketBulletScript : MonoBehaviour
             direction.x = splinterSpeed * Mathf.Cos(degree);
             direction.y = splinterSpeed * Mathf.Sin(degree);
             degree += degreeStep;
-            GameObject splinter = Instantiate(splinterPrefab, this.transform.position-this.transform.up, Quaternion.identity);
+            GameObject splinter = Instantiate(splinterPrefab, this.transform.position - this.transform.up, Quaternion.identity);
             Rigidbody2D splinterRigidBody = splinter.GetComponent<Rigidbody2D>();
             splinterRigidBody.AddForce(direction);
             Destroy(splinter, splinterLifeTime);

@@ -7,17 +7,35 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class AsteroidScript : MonoBehaviour
 {
-    private float radius;
-    [SerializeField] GameObject soundPrefabOnDestroy;
-    [SerializeField] private GameManager gameManager;
-    [SerializeField] private GameObject asteroidPrefab;
-    [SerializeField] private GameObject destroyedParticles;
-    [SerializeField] private bool isCrushableToSmallerAsteroids;
-    [SerializeField] private float hitpoints;
+    float radius;
+    float hitpoints;
+
+    [SerializeField]
+    GameObject soundPrefabOnDestroy;
+    [SerializeField]
+    GameObject asteroidPrefab;
+    [SerializeField]
+    GameObject destroyedParticles;
+    [SerializeField]
+    bool isCrushableToSmallerAsteroids;
+    
 
     void Awake()
     {
-        gameManager = GameObject.FindObjectOfType<GameManager>();
+        GameEvents.OnAsteroidCreated();
+        GameEvents.PlayerDeath += OnPlayerDeath;
+    }
+
+    void OnDestroy()
+    {
+        GameEvents.PlayerDeath -= OnPlayerDeath;
+        OnDeath();
+    }
+
+    void OnPlayerDeath()
+    {
+        float timeToDie = Random.Range(0.1f, 3.0f);
+        Destroy(this.gameObject, timeToDie);
     }
 
     void Damage(float hitpoints)

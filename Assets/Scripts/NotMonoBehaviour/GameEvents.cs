@@ -6,6 +6,7 @@ using System;
 public class GameEvents
 {
 
+    public static Action AsteroidCreated;
     public static Action<WeaponType> WeaponChanged;
     public static Action ClearScreen;
     public static Action GameOver;
@@ -17,6 +18,7 @@ public class GameEvents
     public static Action<GameState> GameStateChanged;
     public static Action PowerupPickup;
 
+    public static void OnAsteroidCreated() => AsteroidCreated?.Invoke();
     public static void OnPowerupPickup() => PowerupPickup?.Invoke();
     public static void OnGameStateChanged(GameState gameState) => GameStateChanged?.Invoke(gameState);
     public static void OnClearScreen() => ClearScreen?.Invoke();

@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class WeaponFirePlace : MonoBehaviour
 {
+    // [SerializeField]
+    // GameObject playerControllet;
     [SerializeField]
     GameObject player;
-    PlayerScript playerScript;
+    PlayerController controllerScript;
 
     [SerializeField]
     public float weaponTimeout = 15.0f;
@@ -20,8 +22,8 @@ public class WeaponFirePlace : MonoBehaviour
         currentWeapon = new SquareWeapon(this.player, this.gameObject);
         weaponTimeoutTimer = weaponTimeout;
 
-        this.playerScript = player.GetComponent<PlayerScript>();
-        this.playerScript.Fire += OnFire;
+        this.controllerScript = player.GetComponent<PlayerController>();
+        this.controllerScript.Fire += OnFire;
         GameEvents.WeaponChanged += OnWeaponChange;
         GameEvents.PlayerDeath += OnPlayerDeath;
     }

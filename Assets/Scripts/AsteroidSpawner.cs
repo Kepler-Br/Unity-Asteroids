@@ -5,28 +5,59 @@ using UnityEngine;
 public class AsteroidSpawner : MonoBehaviour
 {
     [SerializeField]
-    GameObject asteroidPrefab;
+    GameObject asteroidPrefab = null;
 
     [SerializeField]
-    bool isSpawningAsteroids;
+    bool isSpawningAsteroids = false;
 
+    [SerializeField]
     int totalAsteroids = 0;
+    [SerializeField]
     int asteroidDestroyed = 0;
-    const int defaultAsteroidsToDestroyPerLevel = 10;
+    [SerializeField]
+    int minAsteroidsOnScreen = 20;
+    const int defaultAsteroidsToDestroyPerLevel = 100;
+
+    [SerializeField]
+    float spawnTimer = 0.0f;
+    [SerializeField]
+    float spawnTimerDefault = 1.0f;
 
     void Awake()
     {
         GameEvents.AsteroidDestroyed += OnAsteroidDestroyed;
         GameEvents.AsteroidCreated += OnNewAsteroidCreated;
         GameEvents.GameStateChanged += OnGameStateChange;
+        GameEvents.ClearScreen += OnClearScreen;
+        GameEvents.PlayerDeath += OnPlayerDeath;
     }
 
     void Update()
     {
-        // if (asteroidDestroyed >= defaultAsteroidsToDestroyPerLevel)
-            // isSpawningAsteroids = false;
-        if(isSpawningAsteroids && totalAsteroids <= 20)
-            SpawnAsteroid();
+        if (asteroidDestroyed >= defaultAsteroidsToDestroyPerLevel)
+            isSpawningAsteroids = false;
+
+        if (isSpawningAsteroids && totalAsteroids <= minAsteroidsOnScreen)
+        {
+            if (spawnTimer < 0.0f)
+            {
+                SpawnAsteroid();
+                spawnTimer = spawnTimerDefault;
+            }
+            spawnTimer -= Time.deltaTime;
+        }
+    }
+
+    void OnPlayerDeath()
+    {
+        // asteroidDestroyed += totalAsteroids;
+        totalAsteroids = 0;
+    }
+
+    void OnClearScreen()
+    {
+        asteroidDestroyed += totalAsteroids;
+        totalAsteroids = 0;
     }
 
     void OnGameStateChange(GameState gameState)

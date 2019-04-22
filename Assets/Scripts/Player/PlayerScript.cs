@@ -6,17 +6,17 @@ using System;
 public class PlayerScript : MonoBehaviour
 {
     [SerializeField]
-    GameObject[] lines;
-    Material[] linesMaterials;
+    GameObject[] lines = null;
+    Material[] linesMaterials = null;
     int lineColorId;
 
-    public GameObject destroyedShipPrefab;
-    public GameObject weaponFirePlace;
+    public GameObject destroyedShipPrefab = null;
+    public GameObject weaponFirePlace = null;
     public int lives = 3;
 
     [SerializeField]
-    AudioSource deathSound;
-    WeaponFirePlace weaponFirePlaceScript;
+    AudioSource deathSound = null;
+    WeaponFirePlace weaponFirePlaceScript = null;
 
 
     void Start()

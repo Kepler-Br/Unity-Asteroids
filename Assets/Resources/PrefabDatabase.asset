@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130c38930e037ef149fe99a468bcb0d7, type: 3}
+  m_Name: PrefabDatabase
+  m_EditorClassIdentifier: 
+  _destroyedAsteroidParticle: {fileID: 5494240909023990013, guid: e57041bdaf6e70febbb9837a1fca5c9d,
+    type: 3}
+  _weaponFireParticle: {fileID: 4354494891393923552, guid: b1d8ca105f3e30e2c92a56053e711dd3,
+    type: 3}
+  _lazerBullet: {fileID: 3053480779325683660, guid: b4efacb816c55620aab22e7743cfa981,
+    type: 3}
+  _rapidFireBullet: {fileID: 2717574364018558191, guid: f3468fefd52d5060096c3357a5721c86,
+    type: 3}
+  _rocketBullet: {fileID: 4856337542465465982, guid: 04fed38242f359c2899583581a334dd1,
+    type: 3}
+  _rocketSplinter: {fileID: 2630355733279774913, guid: 5cb2121359d4c88faa836126e8952b5e,
+    type: 3}
+  _squareBullet: {fileID: 4089688870801636021, guid: 1894fed398a3e62cbbae0bec77743d53,
+    type: 3}
+  _stingerBullet: {fileID: 8274654368083044344, guid: ed7995f272a09d95c8d0c0b2206a80c9,
+    type: 3}
+  _chaingunSound: {fileID: 5769988103649268675, guid: 32c000752b7619208a7b456b7f387256,
+    type: 3}
+  _lazerSound: {fileID: 8287308145994416125, guid: 343ac2b84dddfe19e882bb5f6c8ac009,
+    type: 3}
+  _rapidFireSound: {fileID: 6100560877216125668, guid: d5181ec0b13b784c0924693c351def01,
+    type: 3}
+  _rocketSound: {fileID: 3020682843410270355, guid: 2ca35cf9d008277eab078c2f17d15f12,
+    type: 3}
+  _shotgunSound: {fileID: 3132395617296552317, guid: d869cd2f245be918e8e6e4695ecbe25c,
+    type: 3}
+  _squareSound: {fileID: 7529014310844238882, guid: 84ad2d098f3e9c5fb9e1af59438df5e2,
+    type: 3}
+  _stingerSound: {fileID: 2040668884728711314, guid: 4dd16a4ed37621a879fb3ef6650bf378,
+    type: 3}

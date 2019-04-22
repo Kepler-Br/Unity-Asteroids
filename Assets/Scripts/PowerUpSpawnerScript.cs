@@ -4,30 +4,25 @@ using UnityEngine;
 
 public class PowerUpSpawnerScript : MonoBehaviour
 {
-    public float spawnPowerUpTime = 50.0f;
-    public float spawnPowerUpTimer = 0.0f;
-    public bool spawnPowerups = true;
+    [SerializeField]
+    float spawnPowerUpTime = 50.0f;
+    [SerializeField]
+    float spawnPowerUpTimer = 0.0f;
+    [SerializeField]
+    bool spawnPowerups = true;
 
-    private GameObject[] powerUps;
+    [SerializeField]
+    GameObject[] powerUps = null;
     // Start is called before the first frame update
     void Awake()
     {
         this.SetPosition();
         spawnPowerUpTimer = spawnPowerUpTime;
-        powerUps = new GameObject[] { UnityEngine.Resources.Load("Powerups/RandomWeapon") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/RocketWeapon") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/StingerWeapon") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/RapidWeapon") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/ChaingunWeapon") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/ClearScreenPowerUp") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/ShotgunWeapon") as GameObject,
-                                      UnityEngine.Resources.Load("Powerups/LazerWeapon") as GameObject, };
         GameEvents.GameOver += StopSpawn;
         GameEvents.PlayerDeath += StopSpawn;
         GameEvents.PlayerRespawn += StartSpawn;
         GameEvents.GameRestart += StartSpawn;
         GameEvents.GameStateChanged += OnGameStateChanged;
-
     }
 
     void OnGameStateChanged(GameState gameState)

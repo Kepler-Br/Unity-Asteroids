@@ -1,0 +1,35 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GenericBulletScript : MonoBehaviour
+{
+    [SerializeField]
+    float damage = 1.0f;
+    [SerializeField]
+    bool destroyOnAsteroidContact = true;
+    [SerializeField]
+    GameObject sound;
+
+    void Awake()
+    {
+        PlaySound();
+    }
+
+    void PlaySound()
+    {
+        var soundGameObject = Instantiate(sound);
+        Destroy(soundGameObject, 2.0f);
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Asteroid")
+        {
+            var damageReciever = col.gameObject.GetComponent<DamageReceiver>();
+            damageReciever?.Damage(damage);
+            if (destroyOnAsteroidContact)
+                Destroy(this.gameObject);
+        }
+    }
+}

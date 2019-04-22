@@ -15,20 +15,15 @@ public enum WeaponType
 
 public abstract class PlayerWeapon
 {
-    public GameObject fireParticle;
+    public GameObject fireParticle = null;
     public float reloadTime = 1.0f;
-    public string bulletsFolderName = "Bullets/";
-    public string soundFolderName = "Sound/";
-    public string soundPrefabName = "";
-    public string bulletPrefabName = "";
     public float bulletLifeTime = 2.0f;
     public float bulletForce = 1500.0f;
 
-    public Transform firePlacePosition;
-    public Transform playerPosition;
-    public Rigidbody2D playerRigidBody;
-    public GameObject bulletPrefab;
-    public GameObject soundPrefab;
+    public Transform firePlacePosition = null;
+    public Transform playerPosition = null;
+    public Rigidbody2D playerRigidBody = null;
+    public GameObject bulletPrefab = null;
 
 
     public float reloadTimer = 0.0f;
@@ -41,26 +36,21 @@ public abstract class PlayerWeapon
             reloadTimer -= Time.deltaTime;
     }
 
-    public PlayerWeapon(GameObject player, GameObject firePlace, string bulletName, string soundName = "")
+    public PlayerWeapon(GameObject player, GameObject firePlace)
     {
-        this.bulletPrefabName = bulletName;
-        this.soundPrefabName = soundName.Length == 0 ? bulletName : soundName;
         this.firePlacePosition = firePlace.transform;
-        this.fireParticle = UnityEngine.Resources.Load("FireParticles") as GameObject;
-        this.soundPrefab = UnityEngine.Resources.Load(bulletsFolderName + soundFolderName + soundPrefabName) as GameObject;
         this.playerPosition = player.transform;
         this.playerRigidBody = player.GetComponent<Rigidbody2D>();
-
-        this.bulletPrefab = UnityEngine.Resources.Load(bulletsFolderName + bulletPrefabName) as GameObject;
-
-        if (this.bulletPrefab == null)
-            Debug.LogError("Cannot load bullet prefab by name(null reference): " + bulletPrefabName);
     }
 
-    public void PlaySound()
+    public void SetBulletPrefab(GameObject bulletPrefab)
     {
-        GameObject sound = GameObject.Instantiate(this.soundPrefab);
-        GameObject.Destroy(sound, 5.0f);
+        this.bulletPrefab = bulletPrefab;
+    }
+
+    public void SetFireParticlePrefab(GameObject fireParticle)
+    {
+        this.fireParticle = fireParticle;
     }
 
     public float GetNormalizedReloadTime()
@@ -80,8 +70,11 @@ public abstract class PlayerWeapon
 
 public class ShotgunWeapon : PlayerWeapon
 {
-    public ShotgunWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "SquareBullet", "ShotgunWeapon")
+    public ShotgunWeapon(GameObject player, GameObject firePlace) : base(player, firePlace)
     {
+        SetFireParticlePrefab(PrefabDatabase.WeaponFireParticle);
+        SetBulletPrefab(PrefabDatabase.SquareBullet);
+
         reloadTime = 1.0f;
         bulletLifeTime = 2.0f;
         bulletForce = 1500.0f;
@@ -92,7 +85,6 @@ public class ShotgunWeapon : PlayerWeapon
     {
         if (reloadTimer < 0.0f)
         {
-            PlaySound();
             SpawnParticle(firePlacePosition.position);
             reloadTimer = reloadTime;
             const int bulletCount = 10;
@@ -146,8 +138,10 @@ public class ShotgunWeapon : PlayerWeapon
 
 public class RapidFireWeapon : PlayerWeapon
 {
-    public RapidFireWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "RapidFireBullet")
+    public RapidFireWeapon(GameObject player, GameObject firePlace) : base(player, firePlace)
     {
+        SetFireParticlePrefab(PrefabDatabase.WeaponFireParticle);
+        SetBulletPrefab(PrefabDatabase.RapidFireBullet);
         reloadTime = 0.1f;
         bulletLifeTime = 2.0f;
         bulletForce = 100.0f;
@@ -157,7 +151,6 @@ public class RapidFireWeapon : PlayerWeapon
     {
         if (reloadTimer < 0.0f)
         {
-            PlaySound();
             reloadTimer = reloadTime;
             // SpawnParticle(bulletPosition);
             GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
@@ -190,8 +183,11 @@ public class ChaingunWeapon : PlayerWeapon
     //Otherwise - right.
     private bool isFiringFromLeftMuzzle = true;
 
-    public ChaingunWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "SquareBullet", "ChaingunWeapon")
+    public ChaingunWeapon(GameObject player, GameObject firePlace) : base(player, firePlace)
     {
+        SetFireParticlePrefab(PrefabDatabase.WeaponFireParticle);
+        SetBulletPrefab(PrefabDatabase.SquareBullet);
+
         reloadTime = 0.1f;
         bulletLifeTime = 4.5f;
         bulletForce = 1000.0f;
@@ -201,7 +197,6 @@ public class ChaingunWeapon : PlayerWeapon
     {
         if (reloadTimer < 0.0f)
         {
-            PlaySound();
             reloadTimer = reloadTime;
             Vector3 muzzlePlace = playerPosition.right / 4.0f;
             if (isFiringFromLeftMuzzle)
@@ -220,8 +215,11 @@ public class ChaingunWeapon : PlayerWeapon
 
 public class SquareWeapon : PlayerWeapon
 {
-    public SquareWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "SquareBullet")
+    public SquareWeapon(GameObject player, GameObject firePlace) : base(player, firePlace)
     {
+        SetFireParticlePrefab(PrefabDatabase.WeaponFireParticle);
+        SetBulletPrefab(PrefabDatabase.SquareBullet);
+
         reloadTime = 0.3f;
         bulletLifeTime = 5.0f;
         bulletForce = 1000.0f;
@@ -233,7 +231,6 @@ public class SquareWeapon : PlayerWeapon
         {
             reloadTimer = reloadTime;
             SpawnParticle(firePlacePosition.position);
-            PlaySound();
             GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
@@ -248,8 +245,11 @@ public class RocketWeapon : PlayerWeapon
 
     private bool isFiringFromLeftMuzzle = true;
 
-    public RocketWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "RocketBullet")
+    public RocketWeapon(GameObject player, GameObject firePlace) : base(player, firePlace)
     {
+        SetFireParticlePrefab(PrefabDatabase.WeaponFireParticle);
+        SetBulletPrefab(PrefabDatabase.RocketBullet);
+
         reloadTime = 1.3f;
         bulletLifeTime = 5.0f;
         bulletForce = 1500.0f;
@@ -259,7 +259,6 @@ public class RocketWeapon : PlayerWeapon
     {
         if (reloadTimer < 0.0f)
         {
-            PlaySound();
             Vector3 muzzlePlace = playerPosition.right / 2.0f;
             if (isFiringFromLeftMuzzle)
                 muzzlePlace = -muzzlePlace;
@@ -279,8 +278,10 @@ public class RocketWeapon : PlayerWeapon
 
 public class StingerWeapon : PlayerWeapon
 {
-    public StingerWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "StingerBullet")
+    public StingerWeapon(GameObject player, GameObject firePlace) : base(player, firePlace)
     {
+        SetFireParticlePrefab(PrefabDatabase.WeaponFireParticle);
+        SetBulletPrefab(PrefabDatabase.StingerBullet);
         reloadTime = 1.0f;
         bulletLifeTime = 2.0f;
         bulletForce = 2000.0f;
@@ -290,7 +291,6 @@ public class StingerWeapon : PlayerWeapon
     {
         if (reloadTimer < 0.0f)
         {
-            PlaySound();
             reloadTimer = reloadTime;
             SpawnParticle(firePlacePosition.position);
             GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
@@ -306,10 +306,10 @@ public class StingerWeapon : PlayerWeapon
 
 public class LazerWeapon : PlayerWeapon
 {
-    public LazerWeapon(GameObject player, GameObject firePlace) : base(player, firePlace, "LazerBullet", "LazerWeapon")
+    public LazerWeapon(GameObject player, GameObject firePlace) : base(player, firePlace)
     {
+        SetBulletPrefab(PrefabDatabase.LazerBullet);
         reloadTime = 3.5f;
-        // bulletLifeTime = 20.0f;
         bulletForce = 0.0f;
     }
 
@@ -317,7 +317,6 @@ public class LazerWeapon : PlayerWeapon
     {
         if (reloadTimer < 0.0f)
         {
-            PlaySound();
             reloadTimer = reloadTime;
             GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
             bullet.transform.parent = this.firePlacePosition;

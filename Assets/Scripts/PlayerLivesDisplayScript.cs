@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerLivesDisplayScript : MonoBehaviour
 {
-    [SerializeField] private GameObject[] liveIcons;
+    [SerializeField] private GameObject[] liveIcons = null;
     private int lives = 0;
 
     int maxHealth;

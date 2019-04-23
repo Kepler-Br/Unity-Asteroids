@@ -25,12 +25,10 @@ public class WrapperChild : MonoBehaviour
 
     void Death()
     {
-        Debug.Log("Ded");
     }
 
     void RetranslateDamage(float damage)
     {
-        Debug.Log("For fuck sake!");
         parentDamageReceiver.Damage(damage);
     }
 }

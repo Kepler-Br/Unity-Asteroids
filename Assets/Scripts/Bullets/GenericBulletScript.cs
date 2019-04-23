@@ -9,7 +9,7 @@ public class GenericBulletScript : MonoBehaviour
     [SerializeField]
     bool destroyOnAsteroidContact = true;
     [SerializeField]
-    GameObject sound;
+    GameObject sound = null;
 
     void Awake()
     {

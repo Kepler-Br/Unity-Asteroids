@@ -4,32 +4,57 @@ using UnityEngine;
 
 public class WeaponPowerUpScript : MonoBehaviour
 {
-    public WeaponType weapon;
-    public bool isRandom;
-    private float sinTimer = 0.0f;
-    public float startYPosition = 0.0f;
+    [SerializeField]
+    float decayTime = 10.0f;
+    float decayTimer = 0.0f;
+    [SerializeField]
+    WeaponType weapon;
+    [SerializeField]
+    bool isRandom;
+
     WeaponType[] allowedRandomWeapons = {WeaponType.Chaingun,
                                          WeaponType.RapidFire,
-                                         WeaponType.Rockets,};
+                                         WeaponType.Rockets,
+                                         WeaponType.Lazer,
+                                         WeaponType.Shotgun,
+                                         WeaponType.Stinger,};
+
+    Material material = null;
+    int mainColorID;
+
+    void Awake()
+    {
+        decayTimer = decayTime;
+        mainColorID = Shader.PropertyToID("_MainColor");
+        material = this.GetComponent<Renderer>().material;
+        GameEvents.OnPowerupSpawned(this.transform);
+    }
 
     void FixedUpdate()
     {
-        const float divider = 0.5f;
-        const float step = 0.03f;
-        Vector3 position = this.transform.position;
-        float x = position.x;
-        float y = position.y;
-        y = startYPosition + Mathf.Sin(sinTimer)/divider;
-        x += 0.1f;
-        this.transform.position = new Vector3(x, y, 0);
-        sinTimer += step;
+        decayTimer -= Time.deltaTime;
+        float normalizedDecayTime = GetNormalizedDecayTime();
+        material.SetColor(mainColorID, new Color(normalizedDecayTime, normalizedDecayTime, normalizedDecayTime, 1.0f));
+        if (decayTimer < 0.0f)
+            DestroyPowerup();
+    }
+
+    void DestroyPowerup()
+    {
+        GameEvents.OnPowerupDestroyed();
+        Destroy(this.gameObject);
+    }
+
+    float GetNormalizedDecayTime()
+    {
+        return decayTimer / decayTime;
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
         {
-            GameEvents.OnPowerupPickup();
+
             WeaponType selectedWeapon;
             if (isRandom)
             {
@@ -40,7 +65,7 @@ public class WeaponPowerUpScript : MonoBehaviour
             else
                 selectedWeapon = weapon;
             GameEvents.OnWeaponChanged(selectedWeapon);
-            Destroy(this.gameObject);
+            DestroyPowerup();
         }
     }
 }

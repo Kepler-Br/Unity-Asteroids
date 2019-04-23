@@ -5,7 +5,7 @@ using System;
 
 public class GameEvents
 {
-
+    public static Action<Transform> PowerupSpawned;
     public static Action AsteroidCreated;
     public static Action<WeaponType> WeaponChanged;
     public static Action ClearScreen;
@@ -16,10 +16,11 @@ public class GameEvents
     public static Action HealthPickup;
     public static Action<int> AsteroidDestroyed;
     public static Action<GameState> GameStateChanged;
-    public static Action PowerupPickup;
+    public static Action PowerupDestroyed;
 
+    public static void OnPowerupSpawned(Transform powerup) => PowerupSpawned?.Invoke(powerup);
     public static void OnAsteroidCreated() => AsteroidCreated?.Invoke();
-    public static void OnPowerupPickup() => PowerupPickup?.Invoke();
+    public static void OnPowerupDestroyed() => PowerupDestroyed?.Invoke();
     public static void OnGameStateChanged(GameState gameState) => GameStateChanged?.Invoke(gameState);
     public static void OnClearScreen() => ClearScreen?.Invoke();
     public static void OnWeaponChanged(WeaponType weapon) => WeaponChanged?.Invoke(weapon);

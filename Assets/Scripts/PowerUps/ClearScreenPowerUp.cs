@@ -4,36 +4,46 @@ using UnityEngine;
 
 public class ClearScreenPowerUp : MonoBehaviour
 {
-    private GameManager gameManager;
-    private float sinTimer = 0.0f;
-    public float startYPosition = 0.0f;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    float decayTime = 10.0f;
+    float decayTimer = 0.0f;
+    Material material = null;
+    int mainColorID;
+    void Awake()
     {
-        gameManager = GameObject.FindObjectOfType<GameManager>();
-
+        decayTimer = decayTime;
+        mainColorID = Shader.PropertyToID("_MainColor");
+        material = this.GetComponent<Renderer>().material;
+        GameEvents.OnPowerupSpawned(this.transform);
     }
 
     void FixedUpdate()
     {
-        const float divider = 0.5f;
-        const float step = 0.03f;
-        Vector3 position = this.transform.position;
-        float x = position.x;
-        float y = position.y;
-        y = startYPosition + Mathf.Sin(sinTimer) / divider;
-        x += 0.1f;
-        this.transform.position = new Vector3(x, y, 0);
-        sinTimer += step;
+        decayTimer -= Time.deltaTime;
+        float normalizedDecayTime = GetNormalizedDecayTime();
+        material.SetColor(mainColorID, new Color(normalizedDecayTime, normalizedDecayTime, normalizedDecayTime, 1.0f));
+        if (decayTimer < 0.0f)
+            DestroyPowerup();
+    }
+
+    void DestroyPowerup()
+    {
+        GameEvents.OnPowerupDestroyed();
+        Destroy(this.gameObject);
+    }
+
+
+    float GetNormalizedDecayTime()
+    {
+        return decayTimer / decayTime;
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
         {
-            GameEvents.OnPowerupPickup();
             GameEvents.OnClearScreen();
-            Destroy(this.gameObject);
+            DestroyPowerup();
         }
     }
 }

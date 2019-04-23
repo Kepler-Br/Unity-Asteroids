@@ -22,6 +22,20 @@ public class AsteroidScript : MonoBehaviour
     bool isCrushableToSmallerAsteroids = true;
     int score = 0;
 
+    
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        // if (col.gameObject.tag == "Wall")
+            Debug.Log(col.gameObject);
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        // if (col.gameObject.tag == "Wall")
+            Debug.Log(col.gameObject);
+    }
+
+
 
     void Start()
     {

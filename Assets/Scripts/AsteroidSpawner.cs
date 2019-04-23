@@ -8,8 +8,10 @@ public class AsteroidSpawner : MonoBehaviour
     GameObject asteroidPrefab = null;
 
     [SerializeField]
-    bool isSpawningAsteroids = false;
+    Vector2 asteroidSpawnBoundBox;
 
+    [SerializeField]
+    bool isSpawningAsteroids = false;
     [SerializeField]
     int totalAsteroids = 0;
     [SerializeField]
@@ -23,6 +25,12 @@ public class AsteroidSpawner : MonoBehaviour
     [SerializeField]
     float spawnTimerDefault = 1.0f;
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(this.asteroidSpawnBoundBox.x*2.0f, this.asteroidSpawnBoundBox.y*2.0f, 1.0f));
+    }
+
     void Awake()
     {
         GameEvents.AsteroidDestroyed += OnAsteroidDestroyed;
@@ -34,6 +42,7 @@ public class AsteroidSpawner : MonoBehaviour
 
     void Update()
     {
+        
         if (asteroidDestroyed >= defaultAsteroidsToDestroyPerLevel)
             isSpawningAsteroids = false;
 
@@ -84,13 +93,11 @@ public class AsteroidSpawner : MonoBehaviour
 
     void SpawnAsteroid()
     {
-        float degree = UnityEngine.Random.Range(0.0f, Mathf.PI * 2.0f);
-        float radius = 80.0f;
-        Vector3 spawnPoint = new Vector3();
-        spawnPoint.x = radius * Mathf.Cos(degree);
-        spawnPoint.y = radius * Mathf.Sin(degree);
 
-        GameObject asteroid = Instantiate(asteroidPrefab, spawnPoint, Quaternion.identity);
+        float x = Random.Range(-this.asteroidSpawnBoundBox.x, this.asteroidSpawnBoundBox.x);
+        float y = Random.Range(-this.asteroidSpawnBoundBox.y, this.asteroidSpawnBoundBox.y);
+
+        GameObject asteroid = Instantiate(asteroidPrefab, new Vector3(x, y, 0.0f), Quaternion.identity);
         AsteroidScript asteroidScript = asteroid.GetComponent<AsteroidScript>();
         const float maxRadius = 5.0f;
         const float minRadius = 2.0f;

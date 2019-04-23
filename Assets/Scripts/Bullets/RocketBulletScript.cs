@@ -6,7 +6,7 @@ public class RocketBulletScript : MonoBehaviour
 {
     public float damage = 100.0f;
     [SerializeField]
-    GameObject sound;
+    GameObject sound = null;
 
     void Awake()
     {

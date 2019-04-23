@@ -63,8 +63,9 @@ public class WeaponLaserScript : MonoBehaviour
     void Update()
     {
         RaycastHit2D rc2d = Physics2D.Raycast(this.transform.position, this.transform.up);
-        lineCreator.lines[1] = new Vector3(lineCreator.lines[1].x, rc2d.distance < 0.001 ? 100.0f : rc2d.distance, 0.0f);
-        lineCreator.UpdateMesh();
+        // lineCreator.lines[1] = new Vector3(lineCreator.lines[1].x, rc2d.distance < 0.001 ? 100.0f : rc2d.distance, 0.0f);
+        transform.localScale = new Vector3(1.0f, rc2d.distance < 0.001 ? 100.0f : rc2d.distance, 1.0f);
+        // lineCreator.UpdateMesh();
         if (rc2d)
         {
             if (rc2d.collider.gameObject.tag == "Asteroid" && currentStage == LazerStages.damage)

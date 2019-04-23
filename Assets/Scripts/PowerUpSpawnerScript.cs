@@ -6,14 +6,24 @@ public class PowerUpSpawnerScript : MonoBehaviour
 {
     [SerializeField]
     float spawnPowerUpTime = 50.0f;
-    [SerializeField]
     float spawnPowerUpTimer = 0.0f;
     [SerializeField]
     bool spawnPowerups = true;
 
     [SerializeField]
     GameObject[] powerUps = null;
-    // Start is called before the first frame update
+
+    [SerializeField]
+    Vector2 powerupSpawnBoundBox;
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(this.powerupSpawnBoundBox.x * 2.0f,
+                                                      this.powerupSpawnBoundBox.y * 2.0f,
+                                                      1.0f));
+    }
+
     void Awake()
     {
         this.SetPosition();
@@ -54,7 +64,7 @@ public class PowerUpSpawnerScript : MonoBehaviour
             spawnPowerUpTimer -= Time.deltaTime;
             if (spawnPowerUpTimer < 0.0f)
             {
-                SpawnPowerUp();
+                SpawnPowerup();
                 spawnPowerUpTimer = spawnPowerUpTime;
             }
         }
@@ -67,11 +77,19 @@ public class PowerUpSpawnerScript : MonoBehaviour
         return this.powerUps[powerUpIndex];
     }
 
-    void SpawnPowerUp()
+    // void SpawnPowerUp()
+    // {
+    //     GameObject powerUp = Instantiate(this.GetRandomPowerUp(), this.transform.position, Quaternion.identity);
+    //     const float destroyPowerUpTime = 18.0f;
+    //     Destroy(powerUp, destroyPowerUpTime);
+    // }
+
+    void SpawnPowerup()
     {
-        GameObject powerUp = Instantiate(this.GetRandomPowerUp(), this.transform.position, Quaternion.identity);
-        const float destroyPowerUpTime = 18.0f;
-        Destroy(powerUp, destroyPowerUpTime);
+        float x = Random.Range(-this.powerupSpawnBoundBox.x, this.powerupSpawnBoundBox.x);
+        float y = Random.Range(-this.powerupSpawnBoundBox.y, this.powerupSpawnBoundBox.y);
+
+        Instantiate(this.GetRandomPowerUp(), new Vector3(x, y, 0.0f), Quaternion.identity);
     }
 
     void StopSpawn()

@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
         GameEvents.PlayerDeath += OnPlayerDeath;
         GameEvents.GameRestart += OnGameRestart;
         GameEvents.ClearScreen += ClearScreen;
-        GameEvents.PowerupPickup += OnPowerupPickup;
+        // GameEvents.PowerupPickup += OnPowerupPickup;
     }
 
     void OnPowerupPickup()

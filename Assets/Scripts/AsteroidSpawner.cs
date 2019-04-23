@@ -29,7 +29,7 @@ public class AsteroidSpawner : MonoBehaviour
     [SerializeField]
     float spawnTime = 1.0f;
 
-    void OnDrawGizmos()
+    void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
         Gizmos.DrawWireCube(Vector3.zero, new Vector3(this.asteroidSpawnBoundBox.x * 2.0f, this.asteroidSpawnBoundBox.y * 2.0f, 1.0f));

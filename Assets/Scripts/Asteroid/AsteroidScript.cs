@@ -11,6 +11,8 @@ public class AsteroidScript : MonoBehaviour
     float radius = 0.0f;
 
     [SerializeField]
+    Rigidbody2D rigidBody = null;
+    [SerializeField]
     GameObject soundPrefabOnDestroy = null;
     [SerializeField]
     GameObject asteroidPrefab = null;
@@ -22,26 +24,19 @@ public class AsteroidScript : MonoBehaviour
     bool isCrushableToSmallerAsteroids = true;
     int score = 0;
 
-    
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        // if (col.gameObject.tag == "Wall")
-            Debug.Log(col.gameObject);
-    }
-
     void OnCollisionEnter2D(Collision2D col)
     {
-        // if (col.gameObject.tag == "Wall")
-            Debug.Log(col.gameObject);
+        if (col.gameObject.tag == "Wall")
+        {
+            rigidBody.velocity = -rigidBody.velocity;
+        }
+
     }
-
-
 
     void Start()
     {
         GameEvents.OnAsteroidCreated();
         damageReceiver.HealthZero += OnHealthZero;
-        // GameEvents.PlayerDeath += OnPlayerDeath;
     }
 
     void OnHealthZero()
@@ -49,19 +44,6 @@ public class AsteroidScript : MonoBehaviour
         OnDeath();
         Destroy(this.gameObject);
     }
-
-    void OnDestroy()
-    {
-
-        // GameEvents.PlayerDeath -= OnPlayerDeath;
-    }
-
-    void OnPlayerDeath()
-    {
-        // float timeToDie = Random.Range(0.1f, 3.0f);
-        // Destroy(this.gameObject, timeToDie);
-    }
-
 
     Vector3[] GenerateAsteroidVerticles()
     {
@@ -128,7 +110,7 @@ public class AsteroidScript : MonoBehaviour
 
     static private float HitPointsFromRadius(float radius)
     {
-        const float multiplyFactor = 65.0f;
+        const float multiplyFactor = 40.0f;
         return radius * multiplyFactor;
     }
 
@@ -153,17 +135,19 @@ public class AsteroidScript : MonoBehaviour
 
     void OnDeath()
     {
+        score = (int)HitPointsFromRadius(this.radius) / 10;
+        GameEvents.OnAsteroidDestroyed(score);
         if (this.isCrushableToSmallerAsteroids)
         {
             const int maxSmallerAsteroids = 4;
             int asteroidNum = Random.Range(2, maxSmallerAsteroids);
             for (int i = 0; i < asteroidNum; i++)
-                CreateSmallerAsteroid(asteroidNum);
+                CreateSmallerAsteroid(2);
         }
-        GameEvents.OnAsteroidDestroyed(score);
+        
         GameObject sound = Instantiate(soundPrefabOnDestroy);
         Destroy(sound, 3);
-        score = (int)HitPointsFromRadius(this.radius) / 10;
+        
         var newParticle = Instantiate(destroyedParticles, this.gameObject.transform.position, Quaternion.identity);
         Destroy(newParticle, 5);
     }

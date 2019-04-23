@@ -24,7 +24,7 @@ public class GenericBulletScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Asteroid")
+        if (col.gameObject.tag == "Asteroid" || col.gameObject.tag == "Wall")
         {
             var damageReciever = col.gameObject.GetComponent<DamageReceiver>();
             damageReciever?.Damage(damage);

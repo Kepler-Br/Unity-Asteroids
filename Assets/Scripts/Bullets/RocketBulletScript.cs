@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class RocketBulletScript : MonoBehaviour
 {
-    public float damage = 100.0f;
     [SerializeField]
     GameObject sound = null;
+    [SerializeField]
+    GameObject splinterPrefab = null;
+    public float damage = 100.0f;
 
     void Awake()
     {
@@ -21,7 +23,7 @@ public class RocketBulletScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Asteroid")
+        if (col.gameObject.tag == "Asteroid" || col.gameObject.tag == "Wall")
             OnDeath(col.gameObject);
     }
 
@@ -36,7 +38,6 @@ public class RocketBulletScript : MonoBehaviour
 
     void SpawnSplinters(int count)
     {
-        GameObject splinterPrefab = UnityEngine.Resources.Load("Bullets/RocketSplinter") as GameObject;
         float degreeStep = Mathf.PI / count;
         const float splinterSpeed = 2000.0f;
         const float splinterLifeTime = 3.0f;

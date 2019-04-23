@@ -26,7 +26,7 @@ public class Camerashake : MonoBehaviour
     {
         GameEvents.AsteroidDestroyed += OnAsteroidDestroyed;
         GameEvents.PlayerDeath += OnPlayerDeath;
-        originalPosition = this.transform.position;
+        
 
     }
 
@@ -37,10 +37,11 @@ public class Camerashake : MonoBehaviour
 
     void Shake()
     {
+        originalPosition = this.transform.position;
         Vector2 t = Random.insideUnitCircle * NormalizedShakeTime()/10.0f;
         float x = t.x + originalPosition.x;
         float y = t.y + originalPosition.y;
-        float z = -10.0f;
+        float z = originalPosition.z;
         this.transform.position = new Vector3(x, y, z);
         shakeTimer -= Time.deltaTime;
     }

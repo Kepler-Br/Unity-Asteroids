@@ -41,10 +41,12 @@ public class PrefabDatabase : ScriptableObject
     public static GameObject ShotgunSound => Instance._shotgunSound;
     public static GameObject SquareSound => Instance._squareSound;
     public static GameObject StingerSound => Instance._stingerSound;
+    public static GameObject WallCollideParticle => Instance._wallCollideParticle;
 
     [Header("Particles")]
     [SerializeField] private GameObject _destroyedAsteroidParticle = null;
     [SerializeField] private GameObject _weaponFireParticle = null;
+    [SerializeField] private GameObject _wallCollideParticle = null;
     // [Header("Player")]
     // [SerializeField] private GameObject _playerIcon;
     // [Header("Asteroid")]

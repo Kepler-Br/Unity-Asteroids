@@ -64,6 +64,8 @@ public abstract class PlayerWeapon
                                                        playerPosition.rotation.eulerAngles.y,
                                                        playerPosition.rotation.eulerAngles.z);
         var particle = GameObject.Instantiate(fireParticle, position, particleRotation);
+        var particleRigidBody = particle.GetComponent<Rigidbody2D>();
+        particleRigidBody.velocity = playerRigidBody.velocity;
         GameObject.Destroy(particle, 5.0f);
     }
 }
@@ -93,6 +95,7 @@ public class ShotgunWeapon : PlayerWeapon
                 GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
                 GameObject.Destroy(bullet, bulletLifeTime);
                 Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
+                bulletRigidBody.velocity = playerRigidBody.velocity;
                 bulletRigidBody.AddForce(GetBulletForce());
                 playerRigidBody.AddForce(-playerPosition.up * bulletForce / 10.0f);
             }
@@ -156,7 +159,8 @@ public class RapidFireWeapon : PlayerWeapon
             GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
-            bulletRigidBody.AddForce(playerPosition.up + (Vector3)playerRigidBody.velocity * 4.0f + GetRandomBulletDirection());
+            bulletRigidBody.velocity = playerRigidBody.velocity;
+            bulletRigidBody.AddForce(playerPosition.up + GetRandomBulletDirection());
             playerRigidBody.AddForce(-playerPosition.up * bulletForce);
         }
     }
@@ -207,7 +211,8 @@ public class ChaingunWeapon : PlayerWeapon
             GameObject bullet = GameObject.Instantiate(bulletPrefab, bulletPosition, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
-            bulletRigidBody.AddForce(playerPosition.up * bulletForce + (Vector3)playerRigidBody.velocity);
+            bulletRigidBody.velocity = playerRigidBody.velocity;
+            bulletRigidBody.AddForce(playerPosition.up * bulletForce);
             playerRigidBody.AddForce(-playerPosition.up * bulletForce);
         }
     }
@@ -234,6 +239,8 @@ public class SquareWeapon : PlayerWeapon
             GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
+
+            bulletRigidBody.velocity = playerRigidBody.velocity;
             bulletRigidBody.AddForce(playerPosition.up * bulletForce);
             playerRigidBody.AddForce(-playerPosition.up * bulletForce);
         }
@@ -270,6 +277,7 @@ public class RocketWeapon : PlayerWeapon
             GameObject bullet = GameObject.Instantiate(bulletPrefab, firePosition, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
+            bulletRigidBody.velocity = playerRigidBody.velocity;
             bulletRigidBody.AddForce(playerPosition.up * bulletForce);
             playerRigidBody.AddForce(-playerPosition.up * bulletForce);
         }
@@ -296,7 +304,8 @@ public class StingerWeapon : PlayerWeapon
             GameObject bullet = GameObject.Instantiate(bulletPrefab, firePlacePosition.position, playerPosition.rotation);
             GameObject.Destroy(bullet, bulletLifeTime);
             Rigidbody2D bulletRigidBody = bullet.GetComponent<Rigidbody2D>();
-            bulletRigidBody.AddForce(playerPosition.up * bulletForce + (Vector3)playerRigidBody.velocity * 4.0f);
+            bulletRigidBody.velocity = playerRigidBody.velocity;
+            bulletRigidBody.AddForce(playerPosition.up * bulletForce);
             playerRigidBody.AddForce(-playerPosition.up * bulletForce);
 
 

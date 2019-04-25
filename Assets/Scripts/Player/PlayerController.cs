@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D playerRigidBody = null;
     [SerializeField]
     GameObject rocketExhaust = null;
+    [SerializeField]
+    GameObject onWallContactSound = null;
 
     [SerializeField]
     float thrustForce = 300.0f;
@@ -86,6 +88,22 @@ public class PlayerController : MonoBehaviour
 
         {
             this.transform.rotation = Quaternion.AngleAxis(aimAngle, Vector3.forward);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Wall")
+        {
+            Vector2 v = (Vector2)transform.position - col.GetContact(0).point;
+            v.Normalize();
+            var particle = Instantiate(PrefabDatabase.WallCollideParticle, col.GetContact(0).point, Quaternion.Euler(0.0f, 0.0f, Mathf.Atan2(-v.x, v.y) * Mathf.Rad2Deg));
+            Destroy(particle, 1.0f);
+            var sound = Instantiate(onWallContactSound, transform.position, Quaternion.identity);
+            Destroy(sound, 1.0f);
+
+            // Debug.Log();
+            playerRigidBody.velocity = -v * 10.0f + playerRigidBody.velocity;
         }
     }
 }

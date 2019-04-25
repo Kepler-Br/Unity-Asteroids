@@ -10,9 +10,12 @@ public class PlayerScript : MonoBehaviour
     Material[] linesMaterials = null;
     int lineColorId;
 
-    public GameObject destroyedShipPrefab = null;
-    public GameObject weaponFirePlace = null;
-    public int lives = 3;
+    [SerializeField]
+    GameObject destroyedShipPrefab = null;
+    [SerializeField]
+    GameObject weaponFirePlace = null;
+    [SerializeField]
+    int lives = 3;
 
     [SerializeField]
     AudioSource deathSound = null;

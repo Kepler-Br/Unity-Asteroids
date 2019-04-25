@@ -232,4 +232,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   decayTime: 10
   weapon: 2
+  pickUpSound: {fileID: 1192944122895719157, guid: c7e27dfceb9bd81069d2357f7bcf7415,
+    type: 3}
   isRandom: 0

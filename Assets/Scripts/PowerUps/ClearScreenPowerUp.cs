@@ -5,6 +5,8 @@ using UnityEngine;
 public class ClearScreenPowerUp : MonoBehaviour
 {
     [SerializeField]
+    GameObject pickUpSound = null;
+    [SerializeField]
     float decayTime = 10.0f;
     float decayTimer = 0.0f;
     Material material = null;
@@ -42,6 +44,8 @@ public class ClearScreenPowerUp : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
+                    var sound = Instantiate(pickUpSound, transform.position, Quaternion.identity);
+        Destroy(sound, 2.0f);
             GameEvents.OnClearScreen();
             DestroyPowerup();
         }

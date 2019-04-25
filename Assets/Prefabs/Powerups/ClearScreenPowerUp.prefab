@@ -139,6 +139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 506a3de5e3d9789dfacb57cc2af5b99f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickUpSound: {fileID: 1192944122895719157, guid: c7e27dfceb9bd81069d2357f7bcf7415,
+    type: 3}
   decayTime: 10
 --- !u!1 &6824112032995430033
 GameObject:

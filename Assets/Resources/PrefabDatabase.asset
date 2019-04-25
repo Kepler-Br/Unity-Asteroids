@@ -16,6 +16,8 @@ MonoBehaviour:
     type: 3}
   _weaponFireParticle: {fileID: 4354494891393923552, guid: b1d8ca105f3e30e2c92a56053e711dd3,
     type: 3}
+  _wallCollideParticle: {fileID: 2767812707884002033, guid: 3072ab7f96d2e882f9691d24b6c60ecc,
+    type: 3}
   _lazerBullet: {fileID: 3053480779325683660, guid: b4efacb816c55620aab22e7743cfa981,
     type: 3}
   _rapidFireBullet: {fileID: 2717574364018558191, guid: f3468fefd52d5060096c3357a5721c86,

@@ -10,7 +10,9 @@ public class WeaponPowerUpScript : MonoBehaviour
     [SerializeField]
     WeaponType weapon;
     [SerializeField]
-    bool isRandom;
+    GameObject pickUpSound = null;
+    [SerializeField]
+    bool isRandom = false;
 
     WeaponType[] allowedRandomWeapons = {WeaponType.Chaingun,
                                          WeaponType.RapidFire,
@@ -20,7 +22,7 @@ public class WeaponPowerUpScript : MonoBehaviour
                                          WeaponType.Stinger,};
 
     Material material = null;
-    int mainColorID;
+    int mainColorID = 0;
 
     void Awake()
     {
@@ -54,7 +56,8 @@ public class WeaponPowerUpScript : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-
+            var sound = Instantiate(pickUpSound, transform.position, Quaternion.identity);
+            Destroy(sound, 2.0f);
             WeaponType selectedWeapon;
             if (isRandom)
             {

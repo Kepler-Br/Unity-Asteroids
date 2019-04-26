@@ -17,8 +17,10 @@ public class GameEvents
     public static Action<int> AsteroidDestroyed;
     public static Action<GameState> GameStateChanged;
     public static Action PowerupDestroyed;
+    public static Action AllAsteroidsDestroyed;
 
     public static void OnPowerupSpawned(Transform powerup) => PowerupSpawned?.Invoke(powerup);
+    public static void OnAllAsteroidsDestroyed() => AllAsteroidsDestroyed?.Invoke();
     public static void OnAsteroidCreated() => AsteroidCreated?.Invoke();
     public static void OnPowerupDestroyed() => PowerupDestroyed?.Invoke();
     public static void OnGameStateChanged(GameState gameState) => GameStateChanged?.Invoke(gameState);

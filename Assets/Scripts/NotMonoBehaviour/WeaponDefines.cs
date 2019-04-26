@@ -24,6 +24,7 @@ public abstract class PlayerWeapon
     public Transform playerPosition = null;
     public Rigidbody2D playerRigidBody = null;
     public GameObject bulletPrefab = null;
+    GameObject sound = null;
 
 
     public float reloadTimer = 0.0f;
@@ -41,6 +42,11 @@ public abstract class PlayerWeapon
         this.firePlacePosition = firePlace.transform;
         this.playerPosition = player.transform;
         this.playerRigidBody = player.GetComponent<Rigidbody2D>();
+    }
+
+    public void SetBulletSound(GameObject sound)
+    {
+        this.sound = sound;
     }
 
     public void SetBulletPrefab(GameObject bulletPrefab)
@@ -68,6 +74,14 @@ public abstract class PlayerWeapon
         particleRigidBody.velocity = playerRigidBody.velocity;
         GameObject.Destroy(particle, 5.0f);
     }
+
+
+    public void PlaySound()
+    {
+        var soundGameObject = GameObject.Instantiate(sound);
+        GameObject.Destroy(soundGameObject, 2.0f);
+    }
+
 }
 
 public class ShotgunWeapon : PlayerWeapon
@@ -76,6 +90,7 @@ public class ShotgunWeapon : PlayerWeapon
     {
         SetFireParticlePrefab(PrefabDatabase.WeaponFireParticle);
         SetBulletPrefab(PrefabDatabase.SquareBullet);
+        SetBulletSound(PrefabDatabase.ShotgunSound);
 
         reloadTime = 1.0f;
         bulletLifeTime = 2.0f;
@@ -83,10 +98,12 @@ public class ShotgunWeapon : PlayerWeapon
         reloadTimer = 0.0f;
     }
 
+
     public override void Fire()
     {
         if (reloadTimer < 0.0f)
         {
+            PlaySound();
             SpawnParticle(firePlacePosition.position);
             reloadTimer = reloadTime;
             const int bulletCount = 10;

@@ -13,13 +13,6 @@ public class GenericBulletScript : MonoBehaviour
 
     void Awake()
     {
-        PlaySound();
-    }
-
-    void PlaySound()
-    {
-        var soundGameObject = Instantiate(sound);
-        Destroy(soundGameObject, 2.0f);
     }
 
     void OnTriggerEnter2D(Collider2D col)

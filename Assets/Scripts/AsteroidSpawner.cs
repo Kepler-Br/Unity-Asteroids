@@ -28,6 +28,7 @@ public class AsteroidSpawner : MonoBehaviour
     float spawnTimer = 0.0f;
     [SerializeField]
     float spawnTime = 1.0f;
+    bool isAllAsteroidsDestroyed = false;
 
     void OnDrawGizmosSelected()
     {
@@ -48,6 +49,11 @@ public class AsteroidSpawner : MonoBehaviour
 
     void Update()
     {
+        if (!isAllAsteroidsDestroyed && totalAsteroids == 0 && asteroidDestroyed >= defaultAsteroidsToDestroyPerLevel)
+        {
+            GameEvents.OnAllAsteroidsDestroyed();
+            isAllAsteroidsDestroyed = true;
+        }
 
         if (asteroidDestroyed >= defaultAsteroidsToDestroyPerLevel)
             isSpawningAsteroids = false;
@@ -91,6 +97,7 @@ public class AsteroidSpawner : MonoBehaviour
                 isSpawningAsteroids = false;
                 break;
             case GameState.PlayingState:
+                isAllAsteroidsDestroyed = false;
                 asteroidDestroyed = 0;
                 totalAsteroids = 0;
                 isSpawningAsteroids = true;
@@ -108,7 +115,7 @@ public class AsteroidSpawner : MonoBehaviour
         float asteroidX = 0.0f;
         float asteroidY = 0.0f;
         const int maximumTries = 10;
-        for(int i = 0; i < maximumTries; i++)
+        for (int i = 0; i < maximumTries; i++)
         {
             asteroidX = Random.Range(-this.asteroidSpawnBoundBox.x, this.asteroidSpawnBoundBox.x);
             asteroidY = Random.Range(-this.asteroidSpawnBoundBox.y, this.asteroidSpawnBoundBox.y);

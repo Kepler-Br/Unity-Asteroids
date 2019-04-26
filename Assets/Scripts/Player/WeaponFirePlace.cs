@@ -19,7 +19,7 @@ public class WeaponFirePlace : MonoBehaviour
 
     void Awake()
     {
-        currentWeapon = new SquareWeapon(this.player, this.gameObject);
+        currentWeapon = new ShotgunWeapon(this.player, this.gameObject);
         weaponTimeoutTimer = weaponTimeout;
 
         this.controllerScript = player.GetComponent<PlayerController>();

@@ -2,27 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class BlinkingText : MonoBehaviour
 {
-    [SerializeField] GameState activeOnGameState = GameState.StartState;
-    Text textMesh;
-    [SerializeField] bool isVisible = true;
-    [SerializeField] bool blink = true;
-    [SerializeField] float blinkPeriond = 2.0f;
+    public Action EndBlinking;
 
-    float timer = 0.0f;
+    [SerializeField]
+    GameState activeOnGameState = GameState.StartState;
+    Text textMesh;
+    bool isVisible = true;
+    [SerializeField]
+    bool blink = true;
+    [SerializeField]
+    CustomTimer _blinkPeriod = null;
+
+    public void Restart()
+    {
+        _blinkPeriod.Reset();
+        blink = true;
+    }
 
     void Awake()
     {
-        timer = blinkPeriond;
         textMesh = this.GetComponent<Text>();
         GameEvents.GameStateChanged += OnGameStateChanged;
     }
 
     void OnGameStateChanged(GameState gameState)
     {
-        if( gameState == activeOnGameState)
+        if (gameState == activeOnGameState)
         {
             blink = true;
             isVisible = true;
@@ -40,19 +49,14 @@ public class BlinkingText : MonoBehaviour
     {
         if (!blink)
             return;
-        timer -= Time.deltaTime;
-        if (timer < 0.0f)
-        {
-            timer = blinkPeriond;
+
+        if (isVisible)
+            textMesh.enabled = true;
+        else
+            textMesh.enabled = false;
+
+        if (_blinkPeriod.TryReset())
             isVisible = !isVisible;
-            if (isVisible)
-            {
-                textMesh.enabled = true;
-            }
-            else
-            {
-                textMesh.enabled = false;
-            }
-        }
+
     }
 }
